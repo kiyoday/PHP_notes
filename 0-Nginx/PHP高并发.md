@@ -14,7 +14,7 @@
 
 ### 分而治之
 
-![image-20200601103538671](C:\Users\12605\AppData\Roaming\Typora\typora-user-images\image-20200601103538671.png)
+![image-20200601103538671](https://i.loli.net/2020/06/01/sqO8gMTW5kxD9jI.png)
 
    - nginx均衡负载
 
