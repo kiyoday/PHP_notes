@@ -12,7 +12,9 @@
    - nginx限流
    - 异步队列
 
-### 分而治之![image-20200601103538671](C:\Users\12605\AppData\Roaming\Typora\typora-user-images\image-20200601103538671.png)
+### 分而治之
+
+![image-20200601103538671](C:\Users\12605\AppData\Roaming\Typora\typora-user-images\image-20200601103538671.png)
 
    - nginx均衡负载
 
