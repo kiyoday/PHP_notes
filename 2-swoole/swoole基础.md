@@ -5,7 +5,7 @@
 ### 1. Swoole是什么
 
 - PHP异步网络通信引擎
-- 最终编译为<kbd>so文件</kbd>作为PHP的扩展
+- 最终编译为<kbd>.so文件</kbd>作为PHP的扩展
   
 ### 2. [特性](https://www.swoole.com/)
  - Swoole使用纯C语言编写，提供了PHP语言的<font color =red>**异步多线程**</font>服务器，**异步TCP/UDP网络**客户端，异步MySQL，异步Redis，数据库连接池，AsyncTask，消息队列，毫秒定时器，异步文件读写，异步DNS查询。Swoole内置 了Http/WebSocket服务器端/客户端、Http2.0服务器端。
@@ -41,7 +41,8 @@
 2. **configure预编译** <font color=red>检查安装环境</font>   需要GCC和pkg-config 以及 libxml2-dev
 
    ```bash
-   sudo apt install gcc -y &&
+   sudo apt install gcc -y  &&
+   sudo apt install g++ -y &&
    sudo apt install make -y &&
    sudo apt install openssl -y &&
    sudo apt install curl -y &&
@@ -58,7 +59,8 @@
    sudo apt install libonig-dev -y &&
    sudo apt install libreadline-dev -y &&
    sudo apt install libxslt1-dev -y &&
-   sudo apt install libffi-dev -y
+   sudo apt install libffi-dev -y &&
+   sudo apt install build-essential -y
    ```
    
    
@@ -76,16 +78,109 @@
    $ make -j && make install
    ```
 
-5. 配置PHP环境PATH
+5. 配置PHP**环境PATH**
 
    ```shell
    $ vi ~/.bash_profile
    
    #修改以下路径
    #export PATH
-   #alias php=/home/Work/soft/php/bin/php
+   #alias php=/home/kiyo/study/soft/php/bin
    
    $ source ~/.bash_profile
+   $ php -v
    ```
 
+6. 自定义路径下**配置文件** 解压文件目录下有：**php.ini**-development php.ini-production 
+
+   ```shell
+   $ cp php.ini-development  /home/name/soft/php/bin/php/etc #注意目录位置
+   $ mv php.ini-development php-ini #改名
+$ php -i |grep php.ini #查看文件位置
+   $ mv ./etc/php.ini ./lib/ #根据配置，可能需要移动位置
+   ```
    
+
+
+
+### 3.安装Swoole
+
+1. [github上](https://github.com/swoole/swoole-src) 克隆  或者  下载zip并解压 unzip
+
+   ```shell
+   $ git clone https://github.com/swoole/swoole-src.git
+   ```
+
+2. 使用***phpize***生成configure文件  编译安装
+
+   ```shell
+   $ /home/kiyo/study/soft/php/bin/phpize #在该路径下生成
+   $ ./configure --with-php-config=/home/kiyo/study/soft/php/bin/php-config
+   $ make -j && make install
+   #进入安装目录可以发现swoole.so
+   Installing shared extensions:     /home/kiyo/study/soft/php/lib/php/extensions/no-debug-non-zts-20190902/            Installing header files:          /home/kiyo/study/soft/php/include/php/ 
+   ```
+
+3. 源码目录下试用Demo    /swoole-src-master/examples
+
+   ```shell
+   $ php echo.php #发现报错
+   
+   $ php -m # 查看模块
+   
+   $ vi /php/lib/php.ini #修改文件 加入如下字段
+   extension=swoole
+   
+   $ php -m # 查看模块
+   [PHP Modules]                                                       swoole 
+   $ netstat -anp|grep 9501 #查看端口占用 wsl与windows共用端口
+   $ netstat -anp|findstr 9501 #cmd中使用
+```
+   
+   到此已经正确启用swoole拓展
+
+
+
+## Swoole网络通信引擎的使用
+
+### 1.TCP服务器
+
+- 创建服务器
+
+    ```php
+    //创建Server对象，监听 127.0.0.1:9501端口
+    $serv = new Swoole\Server("127.0.0.1", 9501); 
+
+    //设置运行时的各项参数
+    $serv->set(array(
+        'reactor_num'   => 2,     // reactor thread num
+        'worker_num'    => 4,     // worker process num
+        'backlog'       => 128,   // listen backlog
+        'max_request'   => 50,
+        'dispatch_mode' => 1,
+    ));
+    //监听连接进入事件
+    $serv->on('Connect', function ($serv, $fd, $reactor_id) {  
+        echo "Client: Connect.\n";
+    });
+
+    //监听数据接收事件
+    $serv->on('Receive', function ($serv, $fd, $from_id, $data) {
+        $serv->send($fd, "Server: ".$data);
+    });
+
+    //监听连接关闭事件
+    $serv->on('Close', function ($serv, $fd) {
+        echo "Client: Close.\n";
+    });
+
+    //启动服务器
+    $serv->start(); 
+    ```
+
+- 连接该端口
+
+    ```
+    $ telnet 127.0.0.1 9501
+    ```
+
