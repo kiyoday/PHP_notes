@@ -8,7 +8,7 @@
 - 最终编译为<kbd>.so文件</kbd>作为PHP的扩展
   
 ### 2. [特性](https://www.swoole.com/)
- - Swoole使用纯C语言编写，提供了PHP语言的<font color =red>**异步多线程**</font>服务器，**异步TCP/UDP网络**客户端，异步MySQL，异步Redis，数据库连接池，AsyncTask，消息队列，毫秒定时器，异步文件读写，异步DNS查询。Swoole内置 了Http/WebSocket服务器端/客户端、Http2.0服务器端。
+ - Swoole使用纯C语言编写，提供了PHP语言的<font color =red>**异步多线程**👍</font>服务器，**异步TCP/UDP网络**📶客户端，异步MySQL，异步Redis，数据库连接池，AsyncTask，消息队列，毫秒定时器，异步文件读写，异步DNS查询。Swoole内置 了Http/WebSocket服务器端/客户端、Http2.0服务器端。
 
  - 除了异步I/O的支持之外，Swoole 为PHP多进程的模式设计了多个并发数据结构和IPC通信机制，可以大大简化多进程并发编程的工作。其中包括了并发原子计数器，并发HashTable，Channel， Lock， 进程间通信IPC等丰富的功能特性。
 
@@ -63,11 +63,16 @@
    sudo apt install build-essential -y
    ```
    
+   ```shell
+   $ yum install libxml2 libxml2-devel openssl openssl-devel bzip2 bzip2-devel libcurl libcurl-devel libjpeg libjpeg-devel libpng libpng-devel freetype freetype-devel gmp gmp-devel libmcrypt libmcrypt-devel readline readline-devel libxslt libxslt-devel
+    sqlite-devel
+   ```
+   
    
    
    ```bash
    $ ./configure --help #查看命令
-   $ ./configure --prefix=/home/kiyo/study/soft/php #指定安装路径
+   $ ./configure --prefix=/home/soft/php --enable-fpm --with-mysql --with-mysqli --with-pdo #--enable-debug #指定安装路径
    ```
    
 3. **make **编译构建
@@ -80,8 +85,14 @@
 
 5. 配置PHP**环境PATH**
 
+   ```bash
+   $ alias php=/home/kiyo/study/soft/php/bin/php
+   ```
+
+   或者
+
    ```shell
-   $ vi ~/.bash_profile
+   $ vi ~/.profile
    
    #修改以下路径
    #export PATH
@@ -96,10 +107,11 @@
    ```shell
    $ cp php.ini-development  /home/name/soft/php/bin/php/etc #注意目录位置
    $ mv php.ini-development php-ini #改名
-$ php -i |grep php.ini #查看文件位置
+   $ php -i |grep php.ini #查看文件位置
    $ mv ./etc/php.ini ./lib/ #根据配置，可能需要移动位置
+   $ cp ./etc/php-fpm.d/www.conf.default ./etc/php-fpm.d/www.conf
    ```
-   
+
 
 
 
@@ -135,11 +147,57 @@ $ php -i |grep php.ini #查看文件位置
    [PHP Modules]                                                       swoole 
    $ netstat -anp|grep 9501 #查看端口占用 wsl与windows共用端口
    $ netstat -anp|findstr 9501 #cmd中使用
-```
-   
+   ```
+
    到此已经正确启用swoole拓展
 
+### 4.nginx 源码安装
 
+[nginx官网](https://nginx.org/en/download.html)下载安装包解压
+
+[安装方法](https://www.php.net/manual/zh/install.unix.nginx.php)
+
+$ ./configure --prefix=/home/kiyo/study/soft/nginx #指定安装路径
+
+### 5 . yum版安装
+
+- ###### nginx的安装
+
+  [yum源修改](https://www.imooc.com/video/18203)
+
+  ```bash
+  $ man yum #查看说明
+  $ cd /etc/yum.repos.d/ #修改yum源
+  
+  $ yum search nginx
+  ```
+
+  创建nginx的rep(https://nginx.org/en/linux_packages.html)
+
+  ```bash
+  $ sudo yum install nginx #安装
+  
+  $ whereis nginx #查看位置
+  
+  $ nginx #启动
+  ```
+
+  阿里云需要配置安全组规则才能看到页面
+
+- php的安装
+
+  ```bash
+  $ rpm -qa | grep php
+  $ yum remove php* #删除所有php相关包
+  
+  #添加源
+  $ rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm  
+  $ rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm  
+  
+  $ yum search php7
+  ```
+
+  
 
 ## Swoole网络通信引擎的使用
 
@@ -178,9 +236,10 @@ $ php -i |grep php.ini #查看文件位置
     $serv->start(); 
     ```
 
+
 - 连接该端口
 
-    ```
+	```
     $ telnet 127.0.0.1 9501
-    ```
+  ```
 
