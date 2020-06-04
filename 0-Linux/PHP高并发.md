@@ -14,8 +14,6 @@
 
 ### 分而治之
 
-![image-20200601103538671](https://i.loli.net/2020/06/01/sqO8gMTW5kxD9jI.png)
-
    - nginx均衡负载
 
 ### 特征

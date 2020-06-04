@@ -72,7 +72,11 @@
    
    ```bash
    $ ./configure --help #查看命令
-   $ ./configure --prefix=/home/soft/php --enable-fpm --with-mysql --with-mysqli --with-pdo #--enable-debug #指定安装路径
+   $ ./configure --prefix=/home/soft/php \
+   --enable-fpm --with-mysql \
+   --with-mysqli --with-pdo-mysql \
+   --with-openssl --enable-debug \
+   --with-curl#指定安装路径
    ```
    
 3. **make **编译构建
