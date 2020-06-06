@@ -265,22 +265,27 @@ $arr = [1, 2, 3];
   	dtor_func_t       pDestructor;
   };
   /*
- * HashTable Data Layout
-   * =====================
-   *
-   *                 +=============================+
-   *                 | HT_HASH(ht, ht->nTableMask) |
-   *                 | ...                         |
-   *                 | HT_HASH(ht, -1)             |
-   *                 +-----------------------------+
-   * ht->arData ---> | Bucket[0]                   |
-   *                 | ...                         |
-   *                 | Bucket[ht->nTableSize-1]    |
-   *                 +=============================+
-   */
   ```
-  
-- 理解HashTable 用CRUD
+
+
+
+```php
+HashTable Data Layout
+
+* =====================
+  *
+* +=============================+
+* | HT_HASH(ht, ht->nTableMask) |
+* | ...                         |
+* | HT_HASH(ht, -1)             |
+* +-----------------------------+
+* ht->arData ---> | Bucket[0]   |
+* | ...                         |
+* | Bucket[ht->nTableSize-1]    |
+* +=============================+
+  */
+* 理解HashTable 用CRUD
+```
 
   ```php
   $a = [];  //初始化 nTableSize=8 nTableMask=-2

@@ -177,7 +177,6 @@
   __NAMESPACE__; //当前命名空间的名称
   ```
 
-  
 
 ## 运算符
 
@@ -677,24 +676,24 @@ preg_match_all($pattern, $subject, $m2);//返回5 $m2=[2,1,4,8,3]
 
 
 
-### 魔术方法
+### 魔术方法🎠
 
-- __construct()，类的构造函数
-- __destruct()，类的析构函数
-- __call()，在对象中调用一个不可访问方法时调用
-- __callStatic()，用静态方式中调用一个不可访问方法时调用
-- __get()，获得一个类的成员变量时调用
-- __set()，设置一个类的成员变量时调用
-- __isset()，当对不可访问属性调用isset()或empty()时调用
-- __unset()，当对不可访问属性调用unset()时被调用。
-- __sleep()，执行serialize()时，先会调用这个函数
-- __wakeup()，执行unserialize()时，先会调用这个函数
-- __toString()，类被当成字符串时的回应方法
-- __invoke()，调用函数的方式调用一个对象时的回应方法
-- __set_state()，调用var_export()导出类时，此静态方法会被调用。
-- __clone()，当对象复制完成时调用
-- __autoload()，尝试加载未定义的类
-- __debugInfo()，打印所需调试信息
+| 函数           | 用途                                         |
+| -------------- | -------------------------------------------- |
+| __construct()  | 类的构造函数 <u>方法名和类名一致就是构造</u> |
+| __destruct()   | 类的析构函数                                 |
+| __call()       | 在对象中调用一个不可访问方法时调用           |
+| __callStatic() | 用静态方式中调用一个不可访问方法时调用       |
+| __get()        | 获得一个类的成员变量时调用                   |
+| __set()        | 设置一个类的成员变量时调用                   |
+| __isset()      | 当对不可访问属性调用isset()或empty()时调用   |
+| __unset()      | 当对不可访问属性调用unset()时被调用          |
+| __clone()      | 当对象复制完成时调用                         |
+| __autoload()   | 尝试加载未定义的类                           |
+| __toString()   | 类被当成字符串时的回应方法                   |
+| __debugInfo()  | 打印所需调试信息                             |
+
+
 
 ### 设计模式
 
@@ -724,12 +723,24 @@ preg_match_all($pattern, $subject, $m2);//返回5 $m2=[2,1,4,8,3]
 
 	- Git
 
-### PHP运行原理
+### PHP运行原理 Nginx+PHP-FPM
 
-- Nginx+PHP-FPM
-- CGI协议  PHP解析器 与webserver通讯、联系
+- CGI协议  PHP解析器 与webserver通讯、联系的一个协议
 - FastCGI 是CGI的改良版本 可以保留进程
 - PHP-FPM 是FastCGI的进程管理器
 
 ### PHP常见配置项
+
+| 配置项              | 功能                     |
+| ------------------- | ------------------------ |
+| register_globals    | 注册全局变量             |
+| allow_url_fopen     | 允许远程文件打开         |
+| allow_url_include   | 允许远程文件包含         |
+| date_timezone       | 设置时区                 |
+| display_errors      | 显示错误，生产环境下关掉 |
+| error_reporting     | 错误级别设置             |
+| safe_mode           | 安全模式                 |
+| upload_max_filesize | 上传最大文件大小         |
+| max_file_uploads    | 文件数目                 |
+| post_max_size       | post数据大小             |
 
