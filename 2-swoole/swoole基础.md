@@ -595,3 +595,280 @@ public function onFinish($ser, $taskId, $data){
 
 ## 进程管理、内存、协程
 
+### 多进程
+
+- process.php 创建子进程
+
+    ```php
+    $process = new swoole_process(function(swoole_process $pro) {
+        // todo php redis.php
+    $pro->exec("/home/work/study/soft/php/bin/php", [__DIR__.'/../http_server.php']);//子进程为http
+    }, false);
+    //开启
+    $pid = $process->start();
+    echo $pid . PHP_EOL;
+
+    swoole_process::wait();
+    ```
+
+- 查看进程树
+
+  ```shell
+  $ pstree -p #1984
+  ```
+
+- 进程使用场景
+
+  - 执行多个`curl`
+  - 原始方案：同步顺序执行
+  - 解决方案：引入process 开n个子进程执行
+
+  ```php
+  echo "process-start-time:".date("Ymd H:i:s");
+  $workers = [];
+  $urls = [
+      'http://baidu.com',
+      'http://sina.com.cn',
+      'http://qq.com',
+      'http://baidu.com?search=singwa',
+      'http://baidu.com?search=singwa2',
+      'http://baidu.com?search=imooc',
+  ];
+  
+  for($i = 0; $i < 6; $i++) {
+      // 子进程
+      $process = new swoole_process(function(swoole_process $worker) use($i, $urls) {
+          // curl
+          $content = curlData($urls[$i]);
+          $worker->write($content.PHP_EOL);
+      }, true);
+      $pid = $process->start();
+      $workers[$pid] = $process;
+  }
+  
+  foreach($workers as $process) {
+      echo $process->read();
+  }
+  /**
+   * 模拟请求URL的内容  1s
+   */
+  function curlData($url) {
+      // curl file_get_contents
+      sleep(1);
+      return $url . "success".PHP_EOL;
+  }
+  echo "process-end-time:".date("Ymd H:i:s");
+  ```
+
+
+
+### 高性能共享内存 Table
+
+###### **优势**
+
+- 性能强悍，单线程每秒可读写 `200` 万次；
+
+- 应用代码无需加锁，`Table` 内置行锁自旋锁，所有操作均是多线程 / 多进程安全。用户层完全不需要考虑数据同步问题；
+
+- 支持多进程，`Table` 可以用于多进程之间共享数据；
+
+- 使用行锁，而不是全局锁，仅当 2 个进程在同一 `CPU` 时间，并发读取同一条数据才会进行发生抢锁。
+
+  ```php
+  // 创建内存表
+  $table = new swoole_table(1024);
+  
+  // 内存表增加一列
+  $table->column('id', $table::TYPE_INT, 4);
+  $table->column('name', $table::TYPE_STRING, 64);
+  $table->column('age', $table::TYPE_INT, 3);
+  $table->create();
+  
+  $table->set('singwa_imooc', ['id' => 1, 'name'=> 'singwa', 'age' => 30]);
+  // 另外一种方案
+  $table['singwa_imooc_2'] = [
+      'id' => 2,
+      'name' => 'singwa2',
+      'age' => 31,
+  ];
+  //自减操作
+  $table->decr('singwa_imooc_2', 'age', 2);
+  print_r($table['singwa_imooc_2']);
+  //删除
+  echo "delete start:".PHP_EOL;
+  $table->del('singwa_imooc_2');
+  
+  print_r($table['singwa_imooc_2']);
+  ```
+
+- 应用场景
+
+  多进程数据共享
+
+### 协程
+
+###### 协程
+
+协程可以简单理解为线程，只不过这个线程是`用户态`的，不需要操作系统参与，创建销毁和切换的成本非常低，和线程不同的是协程`没法利用多核 cpu` 的，想利用多核 cpu 需要依赖 `Swoole` 的多进程模型。
+
+###### [channel](https://wiki.swoole.com/#/coroutine?id=什么是channel)
+
+`channel` 可以理解为消息队列，只不过是协程间的消息队列，多个协程通过 `push` 和 `pop` 操作生产消息和消费消息，用来协程之间的通讯。需要注意的是 `channel` 是没法跨进程的，只能一个 `Swoole` 进程里的协程间通讯，最典型的应用是[连接池](https://wiki.swoole.com/#/coroutine/conn_pool)和[并发调用](https://wiki.swoole.com/#/coroutine/multi_call)。
+
+- 底层封装好直接用同步风格即可
+
+  ```php
+  $http = new swoole_http_server('0.0.0.0', 8001);
+  
+  $http->on('request', function($request, $response) {
+      // 获取redis 里面 的key的内容， 然后输出浏览器
+  
+      $redis = new Swoole\Coroutine\Redis();
+      $redis->connect('127.0.0.1', 6379);
+      $value = $redis->get($request->get['a']);
+  
+      $response->header("Content-Type", "text/plain");
+      $response->end($value);
+  });
+  
+  $http->start();
+  ```
+
+  相对于 `Swoole1.x`，`Swoole4+` 提供了协程这个大杀器，所有业务代码都是同步的，但底层的 IO 却是异步的，保证并发的同时避免了传统异步回调所带来的离散的代码逻辑和陷入多层回调中导致代码无法维护，要达到这个效果必须所有的 `IO` 请求都是[异步 IO](https://wiki.swoole.com/#/learn?id=同步io异步io)，而 `Swoole1.x` 时代提供的 `MySQL`、`Redis` 等客户端虽然是异步 IO，但是是异步回调的编程方式，不是协程方式，所以我们在 `Swoole4` 时代移除了这些客户端。
+
+为了解决这些客户端的协程支持问题我们做了大量的工作：
+
+- 刚开始，我们针对每种类型的客户端都做了一个协程客户端，详见[协程客户端](https://wiki.swoole.com/#/coroutine_client/init)，但这样做有 3 个问题：
+  - 实现复杂，每个客户端细枝末节的协议都很复杂，想都完美的支持工作量巨大。
+  - 用户需要更改的代码比较多，比如原来查询 `MySQL` 是用的 PHP 原生的 `PDO`，那么现在需要用 [Swoole\Coroutine\MySQL](https://wiki.swoole.com/#/coroutine_client/mysql) 的方法。
+  - 我们很难覆盖到所有的操作，比如 `proc_open()`、`sleep()` 函数等等也可能阻塞住导致程序变成同步阻塞的。
+- 针对上述问题，我们换了实现思路，采用 `Hook` 原生 PHP 函数的方式实现协程客户端，通过一行代码就可以让原来的同步 IO 的代码变成可以[协程调度](https://wiki.swoole.com/#/coroutine?id=协程调度)的[异步 IO](https://wiki.swoole.com/#/learn?id=同步io异步io)，即`一键协程化`。
+
+通过 `flags` 设置要 `Hook` 的函数的范围
+
+```php
+Co::set(['hook_flags'=> SWOOLE_HOOK_ALL]); // v4.4+版本使用此方法。
+// 或
+Swoole\Runtime::enableCoroutine($flags = SWOOLE_HOOK_ALL);Copy to clipboardErrorCopied
+```
+
+同时开启多个 `flags` 需要使用 `|` 操作
+
+```php
+Co::set(['hook_flags'=> SWOOLE_HOOK_TCP | SWOOLE_HOOK_SLEEP]);
+```
+
+- TCP实例
+
+  ```php
+  Co::set(['hook_flags' => SWOOLE_HOOK_TCP]);
+  
+  Co\run(function() {
+      for ($c = 100; $c--;) {
+          go(function () {//创建100个协程
+              $redis = new Redis();
+              $redis->connect('127.0.0.1', 6379);//此处产生协程调度，cpu切到下一个协程，不会阻塞进程
+              $redis->get('key');//此处产生协程调度，cpu切到下一个协程，不会阻塞进程
+          });
+      }
+  });
+  ```
+
+# 二、Swoole实战
+
+## 	环境配置
+
+- 框架选择- thinkphp5.1
+- swoole特性使用
+- `赛事直播平台`
+- nginx负载均衡
+- redis
+- `系统监控+性能优化`
+
+下载thinkphp5.1
+
+###### 导入静态文件
+
+​	将html文件资源放入public/static/live下
+
+###### 开启swoole http server
+
+​	新建server目录，使用http_server.php的代码
+
+用swoole访问
+
+## 登录模块
+
+- 示意图
+
+  <img src="https://i.loli.net/2020/06/07/ePxNVgjTOa3HK29.png" alt="image-20200607123936591" style="zoom: 100%;float:left" />
+
+### Swoole适配TP框架
+
+- Swoole_http配置入口文件 加载框架
+
+    ```php
+    $http->on('WorkerStart' ,function ($server, $worker_id) {
+        // 定义应用目录
+        define('APP_PATH', __DIR__ . '/../application/');
+        // 加载基础文件
+        require __DIR__ . '/../thinkphp/base.php';
+    });
+    ```
+
+- 因为`swoole接收参数`和thinkphp中接收不一样，所以需要转换为thinkphp可识别，转换POST参数示例如下:
+
+  代理全局变量
+  
+  ```php
+  $http->on('request', function ($request, $response) {
+      $_SERVER  =  [];
+      if(isset($request->server)) {
+          foreach($request->server as $k => $v) {
+              $_SERVER[strtoupper($k)] = $v;
+          }
+      }
+      if(isset($request->header)) {
+          foreach($request->header as $k => $v) {
+              $_SERVER[strtoupper($k)] = $v;
+          }
+      }
+  
+      $_GET = [];
+      if(isset($request->get)) {
+          foreach($request->get as $k => $v) {
+              $_GET[$k] = $v;
+          }
+      }
+      $_POST = [];
+      if(isset($request->post)) {
+          foreach($request->post as $k => $v) {
+              $_POST[$k] = $v;
+          }
+      }
+  
+      ob_start();
+      // 执行应用并响应
+      try {
+          think\Container::get('app')->run()->send();
+      }catch (\Exception $e) {
+          // todo
+      }
+  
+      //echo "-action-".request()->action().PHP_EOL;
+      $res = ob_get_contents();
+      ob_end_clean();
+      $response->end($res);
+      //$http->close();
+});
+  ```
+  
+  
+
+- **解决每次路由访问显示第一次访问时的路径信息**
+
+  找到thinkphp/library/think/`Request.php`文件
+  function path 中的if (is_null($this->path)) {}注释或删除  里面的内容不动
+
+  function pathinfo中的if (is_null($this->pathinfo)) {}注释或删除  里面的内容不动
+  
