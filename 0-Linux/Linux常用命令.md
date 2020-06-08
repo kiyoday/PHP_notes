@@ -69,7 +69,13 @@ at> Ctrl + D #退出
 | 调用解释器使得脚本执行 | bash、csh、 csh、 ash、 bsh、ksh |
 | 使用source命令         | source test.sh                   |
 
+案例：每日0点重启服务器
 
+```shell
+crontab -e * * * * * reboot
+分时日月周  reboot
+0 0 * * * reboot
+```
 
 - 编写基础
 
