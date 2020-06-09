@@ -185,59 +185,94 @@ MYSQL提供事务处理的表引擎： InnoDB
 
 ### 创建索引的原则
 
-1. 最适合索引的列是出现在 WHERE子句中的列，或连接子句中的列而不是出现在 SELECT关键字后的列
+1. 最适合索引的列是出现在 `WHERE子句中`的列，或连接子句中的列而不是出现在 SELECT关键字后的列
 2. 索引列的基数越大，索引的效果越好
-3. 对字符串进行索引，应该制定一个前缀长度，可以节省大量的索引空间
-4. 根据情况创建复合索引，复合索引可以提高查询效率
-5. 避免创建过多索引，索引|会额外占用磁盘空间，降低写操作效率
+3. 对字符串进行索引，应该制定一个`前缀长度`，可以节省大量的索引空间
+4. 根据情况创建`复合索引`，复合索引可以提高查询效率
+5. 避免创建过多索引，索引会额外占用磁盘空间，降低`写操作`效率
 6. 主键尽可能选择较短的数据类型，可以有效减少索引的磁盘占用提高查询效率
 
 ### 索引的注意事项
 
-1. 复合索引遵循前缀原则
+1. 复合索引遵循**前缀原则**即`顺序`
 
-```mysql
-创建的索引有顺序，非顺序的索引不生效
-KEY(a， b， c)  //创建 a b c 索引
-WHERE a=l and b=2 and c= 3 //生效
-WHERE a=1 and b=2	//生效
-WHERE a= 1 	//生效
+    ```mysql
+    #创建的索引有顺序，非顺序的索引不生效
+    KEY(a， b， c)  #创建 a b c 索引 章、节、段
 
-WHERE b=2 andc= 3  	//无效
-WHERE a= 1 and c=3		//无效
-```
+    WHERE a=l and b=2 and c=3 #生效
+    WHERE a=1 and b=2	#生效
+    WHERE a=1 	#生效
+    #跳过前缀原子
+    WHERE b=2 and c=3  	#无效
+    WHERE a=1 and c=3	#无效
+    ```
 
-1. like查询，%在前，则素以失效，可以使用全文索引
-2. column is null可以使用索引
-   `where name=null //也是可以使用索引`
-3. 如果 MYSQL估计使用索引比全表扫描更慢，会放弃使用索引
-   `如果只有100 条数据 where id 1>and id<100 会自动转为全表索引`
-4. 如果or前的条件中的列有索引，后面的没有，索引都不会被用到
-   `where name='cpj' or age='12'`
-5. 列类型是字符串，查询时一定要给值加引|号，否则索引失效
+2. like查询，`%不能在前`，查询`含有%wang%`会失效，可以使用**全文索引**
 
-```mysql
-name varchar(16)
-存了 "100"
-Where name =100  //虽然能得到值 但是没有使用索引
-```
+    ```mysql
+    where name like "wang%"#以wang开头
+    ```
+
+3. column is `null`可以使用索引
+   
+    ```mysql
+       where name=null #也是可以使用索引
+    ```
+
+4. 如果 MYSQL估计使用索引比`全表扫描`更慢，会放弃使用索引
+   
+    ```mysql
+       如果只有100 条数据 where id 1>and id<100 #会自动转为全表索引
+    ```
+
+5. 如果or前的条件中的列有索引，后面的没有，索引都不会被用到
+   
+    ```mysql
+       where name='cpj' or age='12'
+    ```
+
+6. 列类型是字符串，查询时一定要给值`加引号`，否则索引失效
+
+    ```mysql
+    name varchar(16)
+    #存了 "100"
+    Where name =100  #虽然能得到值 但是没有使用索引
+    ```
 
 # SQL语句编写
+
+## 关联update语句
+
+1. 更新 b 表 的 c1 c2 到 A 表的 c1 c2
+
+```mysql
+A(id， sex， par， cl， c2)
+B(id， age， cl， c2)
+//方法一
+update a，b set A.cl= B.cl， A.c2=B.c2
+where A.id = B.id and B.age >50
+//方法二
+update a inner join B on A.id B.id
+set A.c1=B.c1，A.c2= B.c2
+where Bage >50
+```
+​		
 
 ## 六种关联查询
 
 ### 交叉连接 CROSS JOIN
 
-```
-SELECT* FROM A，B(C)或者
-SELECT* FROM A CROSS JOIN B(CROSS JOIN C
+```mysql
+SELECT * FROM A，B(C)或者
+SELECT * FROM A CROSS JOIN B(CROSS JOIN C
 //没有任何关联条件，结果是笛卡尔积，结果集会很大，没有意义，很少使用
 ```
 
 ### 内连接 INNER JOIN
 
-```
-SELECT* FROM A， B WHERE A id=Bd或者
+```mysql
+SELECT * FROM A， B WHERE A id=Bd或者
 SELECT FROM A INNER JOIN B ON A.id=Bid
 ```
 
@@ -245,7 +280,7 @@ SELECT FROM A INNER JOIN B ON A.id=Bid
 
 - 等值连接： ON Aid=Bid
 - 不等值连接： ON A id>B.d
-- 自连接： `SELECT* FROM A T1 INNER JOIN A T2 on T1.id=T2. pid`
+- 自连接： `SELECT* FROM A T1 INNER JOIN A T2 on T1.id=T2.pid`
 - 
 
 ### 外连接 LEFT JOIN/ RIGHT JOIN
@@ -270,20 +305,6 @@ UNION ALL不会合并重复的结果集
 用一条SQL语句的结果作为另外一条SQL语句的条件
 `SELECT FROM A WHERE id IN(SELECT id FROM B)`
 
-## 真题
 
-1. 更新 b 表 的 c1 c2 到 A 表的 c1 c2
-
-```
-A(id， sex， par， cl， c2)
-B(id， age， cl， c2)
-//方法一
-update a， b set A.cl= B.cl， A.c2=B.c2
-where A.id = B.id and B.age >50
-//方法二
-update a inner join B on Aid B id
-set A.c1=B.c1，A.c2= B.c2
-where Bage >50
-```
 
 # 查询优化
