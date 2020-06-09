@@ -39,3 +39,9 @@ $ service sshd reload
 "backgroundImageStrechMode" : "fill",
 ```
 
+## 目录结构
+
+```powershell
+tree /F
+```
+

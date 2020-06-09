@@ -264,47 +264,68 @@ where Bage >50
 ### 交叉连接 CROSS JOIN
 
 ```mysql
-SELECT * FROM A，B(C)或者
-SELECT * FROM A CROSS JOIN B(CROSS JOIN C
-//没有任何关联条件，结果是笛卡尔积，结果集会很大，没有意义，很少使用
+SELECT * FROM A，B(C) 或者
+SELECT * FROM A CROSS JOIN B (CROSS JOIN C)
 ```
+
+没有任何关联条件，结果是`笛卡尔积`，结果集会很大，没有意义，很少使用
 
 ### 内连接 INNER JOIN
 
 ```mysql
 SELECT * FROM A， B WHERE A id=Bd或者
-SELECT FROM A INNER JOIN B ON A.id=Bid
+SELECT FROM A INNER JOIN B ON A.id=B.id
 ```
 
-#### 内连接分为三类
-
-- 等值连接： ON Aid=Bid
-- 不等值连接： ON A id>B.d
-- 自连接： `SELECT* FROM A T1 INNER JOIN A T2 on T1.id=T2.pid`
-- 
+> 内连接:多表中同时符合某种条件的数据记录的集合
+>
+> 分为三类
+>
+> - `等值`连接： ON A.id=B.id
+> - `不等值`连接： ON A.id>B.id
+> - `自`连接： `SELECT* FROM A T1 INNER JOIN A T2 on T1.id=T2.pid`
 
 ### 外连接 LEFT JOIN/ RIGHT JOIN
 
-#### 左外连接
+- **左外连接LEFT JOIN**
 
-LEFT OUTER JOIN，以左表为主，先查询出左表，按照ON后的关联条件匹配右表，没有匹配到的用NULL填充，可以简写成 LEFT JOIN
+  LEFT OUTER JOIN，以`左表为主`，先查询出左表，按照ON后的关联条件匹配右表，没有匹配到的用NULL填充，可以简写成 LEFT JOIN
 
-#### 右外连接
+- **右外连接RIGHT JOIN**
 
-RIGHT OUTER JOIN，以右表为主，先查询出右表，按照ON后的关联条件匹配左表，没有匹配到的用NULL填充，可以简写成 RIGHT JOIN
+  RIGHT OUTER JOIN，以`右表为主`，先查询出右表，按照ON后的关联条件匹配左表，没有匹配到的用NULL填充，可以简写成 RIGHT JOIN
 
 ### 联合查询 UNION与 UNION ALL
 
-`SELECT* FROM A UNION SELECT* FROM B UNION··`
-就是把多个结果集集中在一起， UNION前的结果为基准，需要注
-意的是联合查询的列数要相等，相同的记录行会合并
-UNION ALL不会合并重复的结果集
+```mysql
+SELECT* FROM A UNION SELECT* FROM B UNION··
+```
+
+就是把`多个结果集集中在一起`， UNION前的结果为基准，
+
+需要注意的是联合查询的`列数要相等`，`相同`的记录行会`合并`
+
+`UNION ALL`不会合并重复的结果集
+
+### 全连接
+
+MySQL`不支持全连接`
+可以使用`LEFT JOIN`和`UNION`和`RIGHT JOIN`联合使用
+
+```mysql
+SELECT * FROM A LEFT JOIN B ON A.id= B.id UNION
+SELECT * FROM A RIGHT JOIN B ON A.id= B.id
+```
+
+
 
 ### 嵌套语句
 
 用一条SQL语句的结果作为另外一条SQL语句的条件
-`SELECT FROM A WHERE id IN(SELECT id FROM B)`
+
+```mysql
+SELECT FROM A WHERE id IN(SELECT id FROM B)
+```
 
 
 
-# 查询优化
