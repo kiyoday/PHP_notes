@@ -3,6 +3,7 @@ php相关技术栈笔记
 
 ## 目录结构
 
+```shell
 │  README.md
 │
 ├─0-Linux
@@ -34,3 +35,5 @@ php相关技术栈笔记
 └─5-database
         MySQL基础.md
         MySQL面试指南.md
+```
+
