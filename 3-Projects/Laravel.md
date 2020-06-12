@@ -1648,13 +1648,13 @@ Laravel 应用程序的数据库配置文件放置在 config/database.php 文件
 
 首先，启动 mysql 数据库，打开命令行，输入以下指令：
 
-```
+```shell
 sudo service mysql start
 ```
 
 然后登陆 mysql，用户名 `root` 密码为空。
 
-```
+```shell
 mysql -u root -p
 ```
 
@@ -1666,13 +1666,13 @@ mysql -u root -p
 
 创建一个数据库，命名为`myweb`：
 
-```
+```mysql
 create database myweb;
 ```
 
 使用如下命令可以查看当前已经存在的数据库：
 
-```
+```mysql
 show databases;
 ```
 
@@ -1690,9 +1690,7 @@ show databases;
 
 .env
 
-```
-.
-.
+```php
 .
 
 DB_HOST=localhost
@@ -1700,8 +1698,6 @@ DB_DATABASE=myweb
 DB_USERNAME=root
 DB_PASSWORD=
 
-.
-.
 .
 ```
 
@@ -1723,7 +1719,7 @@ Laravel 中的数据库迁移就像是数据库的版本控制系统，他可以
 
 database/migrations/XXX_create_users_table.php
 
-```
+```php
 <?php
 
 use Illuminate\Database\Schema\Blueprint;
@@ -1769,7 +1765,7 @@ class CreateUsersTable extends Migration
 
 比如上面创建 `users` 的代码：
 
-```
+```php
 Schema::create('users', function (Blueprint $table) {
             $table->increments('id'); //创建递增字段‘id’
             $table->string('name'); //创建字符串字段‘name’
@@ -1788,13 +1784,13 @@ Schema::create('users', function (Blueprint $table) {
 
 首先进入项目位置：
 
-```
+```shell
 cd ~/Code/myweb
 ```
 
 运行迁移：
 
-```
+```shell
 php artisan migrate
 ```
 
@@ -1810,13 +1806,13 @@ mysql -u root -p
 
 进入 `myweb` 数据库：
 
-```shell
+```mysql
 use myweb;
 ```
 
 查看所有的数据表：
 
-```shell
+```mysql
 show tables;
 ```
 
@@ -1826,7 +1822,7 @@ show tables;
 
 查看 `users` 表结构：
 
-```
+```mysql
 desc users;
 ```
 
@@ -1840,7 +1836,7 @@ desc users;
 
 进入项目代码，执行回滚：
 
-```
+```shell
 cd ~/Code/myweb
 php artisan migrate:rollback
 ```
@@ -1948,7 +1944,7 @@ php artisan make:model Article
 
 比如下面这段代码可以取出 `users` 数据表中的所有数据。
 
-```
+```php
 <?php
 
 use App\User;
@@ -1962,7 +1958,7 @@ foreach ($users as $user) {
 
 或者用下面这段代码来对数据进行筛选，来选出 `users` 表中 `active` 字段为 1，的数据并且按照 `age` 倒序排列，然后取出前十条。
 
-```
+```php
 $users = App\User::where('active', 1)
                ->orderBy('age', 'desc')
                ->take(10)
@@ -1971,7 +1967,7 @@ $users = App\User::where('active', 1)
 
 当然了，你也可以通过 `find()` 和 `first()` 方法来取回单条记录。
 
-```
+```php
 // 通过主键取回一个模型...
 $flight = App\Flight::find(1);
 
@@ -1981,7 +1977,7 @@ $flight = App\Flight::where('active', 1)->first();
 
 你也可以用主键的集合为参数调用 find 方法，它将返回符合条件的集合：
 
-```
+```php
 $flights = App\Flight::find([1, 2, 3]);
 ```
 
@@ -1989,7 +1985,7 @@ $flights = App\Flight::find([1, 2, 3]);
 
 `findOrFail()` 以及 `firstOrFail()` 方法会取回查询的第一个结果。如果没有找到相应结果，则会抛出一个异常：
 
-```
+```php
 $model = App\Flight::findOrFail(1);
 
 $model = App\Flight::where('legs', '>', 100)->firstOrFail();
@@ -1999,7 +1995,7 @@ $model = App\Flight::where('legs', '>', 100)->firstOrFail();
 
 要在数据库中创建一条新记录，只需创建一个新模型实例，并在模型上设置属性和调用 save 方法即可：
 
-```
+```php
 <?php
 
 namespace App\Http\Controllers;
@@ -2041,7 +2037,7 @@ class FlightController extends Controller
 
 要更新模型，则须先取回模型，再设置任何你希望更新的属性，接着调用 `save()` 方法就可以了。
 
-```
+```php
 $user = App\User::find(1);
 
 $user->name = 'New User Name';
@@ -2053,7 +2049,7 @@ $user->save();
 
 在模型实例上调用 `delete()` 方法来删除数据：
 
-```
+```php
 $user = App\User::find(1);
 
 $user->delete();
@@ -2065,7 +2061,7 @@ $user->delete();
 
 - 直接删除，使用 `destroy()` 方法：
 
-```
+```php
 App\User::destroy(1);
 
 App\User::destroy([1, 2, 3]);
@@ -2077,7 +2073,7 @@ App\User::destroy(1, 2, 3);
 
 当然了，你也可以删除某些满足条件的数据，例如我们删除所有被标为不活跃的用户：
 
-```
+```php
 $deletedRows = App\User::where('active', 0)->delete();
 ```
 
@@ -2095,7 +2091,7 @@ Laravel artisan 的 tinker 是一个 REPL (read-eval-print-loop)，REPL 是指 �
 
 `（保存环境的同学可跳过这一步）`根据上次实验学过的知识快速完成配置
 
-```
+```shell
 sudo service mysql start
 mysql -u root -p
 create database myweb;
@@ -2103,7 +2099,7 @@ create database myweb;
 
 .env文件
 
-```
+```php
 .
 .
 .
@@ -2118,14 +2114,14 @@ DB_PASSWORD=
 
 ### 2.然后执行迁移生成数据表
 
-```
+```shell
 cd ~/Code/myweb
 php artisan migrate
 ```
 
 ### 3.使用 artisan 打开 tinker
 
-```
+```shell
 php artisan tinker
 ```
 
@@ -2133,7 +2129,7 @@ php artisan tinker
 
 ### 4.添加一个用户
 
-```
+```php
 $user = new App\User;
 $user -> name = 'SadCreeper';
 $user -> email = '12345@qq.com';
@@ -2145,7 +2141,7 @@ $user -> save();
 
 ### 5.查看用户信息
 
-```
+```php
 App\User::find(1);
 ```
 
@@ -2153,7 +2149,7 @@ App\User::find(1);
 
 ### 6.更新用户信息
 
-```
+```php
 $user = App\User::find(1);
 
 $user->name = 'HappyCreeper';
@@ -2165,7 +2161,7 @@ $user->save();
 
 ### 7.删除用户信息
 
-```
+```php
 App\User::destroy(1);
 App\User::find(1);
 ```
