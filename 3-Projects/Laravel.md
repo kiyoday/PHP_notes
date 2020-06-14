@@ -2208,13 +2208,13 @@ App\User::find(1);
 
 打开`routes.php`加入如下代码：
 
-```
+```php
 Route::resource('articles', 'ArticlesController');
 ```
 
 只需要上面这样一行代码，就相当于创建了如下7条路由，且都是命名路由，我们可以使用类似`route('articles.show')` 这样的用法。
 
-```
+```php
 Route::get('/articles', 'ArticlesController@index')->name('articles.index');
 Route::get('/articles/{id}', 'ArticlesController@show')->name('articles.show');
 Route::get('/articles/create', 'ArticlesController@create')->name('articles.create');
@@ -2226,7 +2226,7 @@ Route::delete('/articles/{id}', 'ArticlesController@destroy')->name('articles.de
 
 app/Http/routes.php
 
-```
+```php
 <?php
 
 /*
@@ -2263,7 +2263,7 @@ php artisan make:controller ArticlesController
 
 resources/views/layouts/app.blade.php
 
-```
+```html
 <!DOCTYPE html>
 <html>
   <head>
@@ -2319,7 +2319,7 @@ resources/views/layouts/app.blade.php
 
 app/Http/Controllers/ArticlesController.php
 
-```
+```php
 <?php
 
 namespace App\Http\Controllers;
@@ -2360,7 +2360,7 @@ class ArticlesController extends Controller
 
 resources/views/articles/index.blade.php
 
-```
+```php+HTML
 @extends('layouts.app')
 
 @section('content')
@@ -2374,7 +2374,7 @@ resources/views/articles/index.blade.php
 
 app/Http/Controllers/ArticlesController.php
 
-```
+```php
 <?php
 
 namespace App\Http\Controllers;
@@ -2405,7 +2405,7 @@ class ArticlesController extends Controller
 
 当然了现在还没有任何文章，但是我们创建了一个“新建文章”的按钮，用来新建文章，点击后会跳转到新建文章表单页面，注意这里的跳转，使用了命名路由。
 
-```
+```html
 <a href="{{ route('articles.create') }}" style="padding:5px;border:1px dashed gray;">
     + New Article
 </a>
@@ -3160,7 +3160,7 @@ http://www.w3cplus.com/sassguide/
 
 package.json 文件是 npm 的配置文件，里边记录了项目用到的扩展包，每次执行 npm install 的时候，npm 就会根据 package.json 文件中的列表逐个安装扩展包，打开 laravel 目录下的 package.json 文件
 
-```
+```json
 {
   "private": true,
   "devDependencies": {
@@ -3199,13 +3199,13 @@ package.json　文件配置好后，就可以在根目录下执行　`npm instal
 
 因为国内墙的原因 `npm install` 执行通常会非常慢，甚至卡死，所以一般使用 npm 国内镜像源加速，方法如下:
 
-```
+```shell
 sudo npm install -g cnpm --registry=https://registry.npm.taobao.org
 ```
 
 上面命令安装好 cnpm 以后，以后就可以直接使用 cnpm 命令来安装依赖了
 
-```
+```shell
 cnpm install
 ```
 
