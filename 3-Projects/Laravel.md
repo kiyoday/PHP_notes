@@ -1871,6 +1871,125 @@ php artisan make:migration create_articles_table
 
 修改后执行迁移就可以对数据库进行想要的操作了。
 
+# Laravel常用功能
+
+## 文件上传
+
+- Laravel 的文件系统是基于Frank de Jonge的Flysystem扩展包
+
+- 提供了简单的接口，可以操作本地端空间、AmazonS3、Rackspace Cloud Storage
+
+- 可以非常简单的切换不同保存方式，但仍使用相同的API操作
+
+### 配置文件及实现
+
+- `config/filesystems.php`
+
+```php
+'uploads' => [
+    'driver' => 'local',
+    'root' => storage_path('uploads'),
+],
+```
+
+```php
+public function upload(Request $request){
+    if ($request->isMethod('post')) {
+        echo json_encode($request->input());
+        $file = $request->file();
+        foreach ($file as $key => $value) {
+            $originalName = $value->getClientOriginalName(); // 文件原名
+            $ext = $value->getClientOriginalExtension();     // 扩展名
+            $realPath = $value->getRealPath();   //临时文件的绝对路径
+            $type = $value->getClientMimeType();     // image/jpeg
+            // 上传文件
+            $filename = date('Y-m-d-H-i-s') . '-' . uniqid() . '.' . $ext;
+			//保存到config文件指定目录
+            $bool = Storage::disk('uploads')->put($filename,file_get_contents($realPath));
+        }
+        return var_dump($file);
+        exit();
+    }
+}
+```
+
+
+
+## 邮件发送
+
+- Laravel 的邮件功能基于热[ ]的SwiftMailer函数库之上,提供了一个简洁的API
+- Laravel为SMTP、Mailgun、 Mandrill、 Amazon SES、PHP的mail函数、以及sendmail提供了驱动从而允许你快速通过本地或云服务发送邮件
+
+## 缓存使用
+
+## 错误与日志
+
+## 队列
+
+- Laravel队列服务为各种不同的后台队列提供了统的API
+- 允许推迟耗时任务(例如发送邮件)的执行，从而大幅提高web请求速度
+
+主要任务
+
+1. 迁移队列需要的数据表
+
+2. 编写任务类
+3. 推送任务到队列
+4. 运行队列监听器
+5. 处理失败任务
+
+### 配置文件及实现
+
+- `config/queue.php`修改
+
+  ```php
+  QUEUE_DRIVER=database
+  ```
+
+  ```shell
+  $ php artisan queue:table
+  $ php artisan make:job SendEmail
+  ```
+  
+- `app/Jobs/SendEmail.php`
+
+  ```php
+  //app/Jobs/SendEmail.php
+  class SendEmail implements ShouldQueue
+  {
+      use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+  
+      protected $email;
+  
+      public function __construct($email)
+      {
+          $this->email = $email;
+      }
+  	//执行任务
+      public function handle()
+      {
+          // 处理邮件发送
+          Mail::raw('队列测试',function($message){
+  			$message->to($this->email) ;|
+  		});
+      }
+  }
+  //***路由***
+  Route::any('queue', 'StudentController@queue');
+  //***控制器***
+  class StudentController extends Controller
+  {
+  	public function queue(){
+          dispatch(new SendEmail('752766395@qq. com'));
+      }
+  }
+  
+  ```
+
+  
+
+
+
 # 模型 & Eloquent
 
 本次实验将学习 Laravel 的模型（Model）和 强大的数据交互 Eloquent。
