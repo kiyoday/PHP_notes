@@ -29,6 +29,12 @@ $ service sshd reload
 
 ## 美化terminal
 
+` Set-Culture zh-CN`设置环境
+
+`notepad $PROFILE`设置powerline
+
+
+
 资源管理器中粘贴 并复制自己想要的图片
 
 - %LOCALAPPDATA%\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\RoamingState

@@ -22,7 +22,7 @@
   var_dump(memory_get_usage());//开辟了
   ```
 
-  <img src="https://i.loli.net/2020/06/03/NTvQoXnliA2xtVs.png" alt="image-20200603232126412" style="zoom: 50%;" />
+  <img src="C:\Users\12605\Desktop\PHP_notes\.img\bDYMXIkN29SJZAU.png" alt="image-20200603232126412" style="zoom: 50%;" />
 
 - 引用传递
 
@@ -35,7 +35,7 @@
   xdebug_debug_zval($a);//查看容器
   ```
 
-  <img src="https://i.loli.net/2020/06/03/SQuMOFRkK3BqUcf.png" alt="image-20200603232402713" style="zoom: 33%;" />
+  <img src="C:\Users\12605\Desktop\PHP_notes\.img\SQuMOFRkK3BqUcf.png" alt="image-20200603232402713" style="zoom: 33%;" />
 
 - **对象本身就是引用传递**
 
@@ -116,7 +116,7 @@
 - 浮点✨
 
   **浮点类型不能用于比较**中，尤其是相等（计算器计算时会转成二进制造成损耗）
-   ![image-20200603190715659](https://i.loli.net/2020/06/03/Uat7yR6B4VCYEu9.png)
+   ![image-20200603190715659](C:\Users\12605\Desktop\PHP_notes\.img\Uat7yR6B4VCYEu9.png)
 
 - 字符串
 - 布尔型
@@ -195,7 +195,7 @@
 
 - 运算符优先级
 
-  <img src="https://i.loli.net/2020/06/04/mesVN1pUHhoajiz.png" alt="image-20200604100643560" style="zoom: 50%;" />
+  <img src="C:\Users\12605\Desktop\PHP_notes\.img\mesVN1pUHhoajiz.png" alt="image-20200604100643560" style="zoom: 50%;" />
 
 - 比较运算符
 
@@ -218,7 +218,7 @@
 
 	- ||和&&与or和and的优先级不同
 	
-	  <img src="https://i.loli.net/2020/06/04/ytwKYoLQnusPRe2.png" alt="image-20200604101011931" style="zoom:50%;" />
+	  <img src="C:\Users\12605\Desktop\PHP_notes\.img\ytwKYoLQnusPRe2.png" alt="image-20200604101011931" style="zoom:50%;" />
 
 ## 流程控制
 

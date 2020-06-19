@@ -23,6 +23,10 @@ docker run --name some-nginx -p 8088:80 -d nginx
 docker cp some-nginx:/etc/nginx/nginx.conf "C:\Users\12605\Desktop\docker\ncof"
 
 docker cp "C:\Users\12605\Desktop\docker\ncof" some-nginx:/etc/nginx/nginx.conf 
+
+docker run -ti -p 9501:9501 --name es-1 -v /easyswoole:C：Users/12605/Desktop/docker/docker-swoole/es:ro es
+
+docker cp es:/easyswoole "C:\Users\12605\Desktop\docker\docker-swoole\es" 
 ```
 
 - 设置windows环境下挂载![image-20200616115000750](https://i.loli.net/2020/06/16/vB1qYtEkxbhDnCz.png)
