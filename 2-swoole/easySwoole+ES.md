@@ -411,14 +411,14 @@ cd dist
 cp html /webroot
 ```
 
-配置nginx代理
+配置nginx代理静态文件:视频
 
 ```nginx
 location / {
 	root easyswoole/webroot ;
 	index  index. html index. htm;
 	if (!-e $request_filename){
-		proxy_pass http://127.0.0.1:8000;
+		proxy_pass http://es:8000;
 	}
 }
 ```
@@ -434,20 +434,273 @@ views/Upload.vue 文件中进行接口联调
    action="/api/upload/file"即后台接口地址
    name="video"既为 file 的字段名字
    accept="video/mp4" 视频文件被限制为只能是 mp4的形式
-
 2. 图片上传接口联调
    请看文件components/ImgUpload.vue文件
    action="/api/upload/file"接口地址
    name="image" 字段名称
    accept="image/jpeg, image/png, image/jpg" 可以上传的文件类型控制，前端自己使用
-
 3. 表单提交接口
    请看views/Upload.vue 文件的第109行代码
    this.axios.post('/admin/video/add'....
 
-# 利用easyswoole处理小视频业务
+## 功能架构
+
+![image-20200620190157541](C:\Users\12605\Desktop\PHP_notes\.img\image-20200620190157541.png)
+
+- 普通架构
+
+<img src="C:\Users\12605\Desktop\PHP_notes\.img\image-20200620190558614.png" alt="image-20200620190558614" style="zoom: 80%;float:left" />
+
+- 高可用架构
+
+<img src="C:\Users\12605\Desktop\PHP_notes\.img\image-20200620190710799.png" alt="image-20200620190710799" style="zoom:80%;float:left" />
+
+# 小视频业务
+
+## 小视频业务介绍
+
+- 点播形式
+- 小 1-5分钟
+
+### 小视频处理
+
+​	视频上传->源视频存储->转码分发->加速播放
+
+​	满足多终端多清晰度播放
+
+​	小型公司最好接入第三方视频处理SDK
+
+### 	开发流程
+
+​	需求评审-> UE图设计->接口定义->接口开发->前后端联调
+
+​	使用postman上传视频、图片文件
+
+![image-20200620204043003](C:\Users\12605\Desktop\PHP_notes\.img\image-20200620204043003.png)
+
+## 视频上传到本地
+
+使用Request里的方法
+
+```php
+$video = $request->getUploadedFile("file");
+$flag = $video->moveTo("/easyswoole/webroot/1.mp4");
+$data = [
+    'url'=>"1.mp4",
+    'flag'=>$flag
+];
+if($flag){
+    return $this->writeJson(200,'OK',$data);
+}else{
+    return $this->writeJson(400,'OK',$data);
+}
+```
+
+封装到lib中
+
+```php
+<?php
 
 
+namespace App\Lib\Upload;
+
+use App\Lib\Utils;
+use EasySwoole\Http\Request;
+
+class Base
+{
+    //上传文件的 file - key
+    public $type = '';
+    private $ClientMediaType;
+
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+        $files = $this->request->getSwooleRequest()->files;
+        $types = array_keys($files);
+        $this->type = $types[0];
+
+    }
+
+    public function upload(){
+        if($this->type != $this->fileType){
+            return false;
+        }
+
+        $videos = $this->request->getUploadedFile($this->type);
+        $this->size = $videos->getSize();
+        $this->checkSize();
+
+        $fileName = $videos->getClientFileName();
+        //video/mp4形式
+        $this->ClientMediaType = $videos->getClientMediaType();
+        $this->checkMediaType();//拆分检查
+
+        $file = $this->getFile($fileName);
+        $result = $videos->moveTo($file);
+        if(!empty($result)){
+            return $this->file;
+        }
+        return false;
+    }
+
+    public function getFile($fileName){
+        $pathinfo = pathinfo($fileName);
+        $extentsion = $pathinfo['extension'];
+        //  /video/2020/06
+        $dirname = '/'.$this->type.'/'.date("Y").'/'.date("m");
+        //  /easyswoole/webroot/video/2020/06
+        $dir = EASYSWOOLE_ROOT.'/webroot'.$dirname;
+        if(!is_dir($dir)){
+            mkdir($dir,0777,true);
+        }
+        //  /9c5a2c47376e21ae.mp4
+        $basename = '/'.Utils::getFileKey($fileName).'.'.$extentsion;
+        //返回给前端的  /video/2020/06/9c5a2c47376e21ae.mp4
+        $this->file = $dirname.$basename;
+        //  保存用的绝对路径
+        //  /easyswoole/webroot/video/2020/06/9c5a2c47376e21ae.mp4
+        $realpath = $dir.$basename;
+        return $realpath;
+    }
+    
+    public function checkMediaType(){
+        $clientMediaType = explode("/", $this->ClientMediaType);
+        $clientMediaType = $clientMediaType[1] ?? "";
+        if(empty($clientMediaType)||
+            !in_array($clientMediaType,$this->fileExtTypes)){
+            throw new \Exception("上传{$this->type}文件不合法");
+        }
+    }
+
+    public function checkSize(){
+        if(empty($this->size)){
+            return false;
+        }
+    }
+}
+
+class Video extends Base
+{
+    public $fileType = 'video';
+
+    public $maxSize = 122;
+
+    public $fileExtTypes = [
+        'mp4',
+        'x-flv',
+    ];
+}
+//控制器
+class Upload extends BaseController
+{
+    public function file(){
+        $request = $this->request();
+        try{
+            $obj = new Video($request);
+            $file = $obj->upload();
+        }catch (\Exception $e){
+            return $this->writeJson(400,$e->getMessage(),[]);
+        }
+        if(empty($file)){
+            return $this->writeJson(400,"上传失败",[]);
+        }
+        $data = [
+            'url' => $file,
+        ];
+        return $this->writeJson(200,"OK",$data);
+    }
+}
+```
+
+## 图片上传封装
+
+### 方法一：判断类型
+
+```php
+$request = $this->request; 
+$files = $request->getSwooleRequest()->files;
+$types = array_keys($files);
+$type = $types[0];
+if($type == 'image'){
+    $obj = new Image($request);
+    $file = $obj->upload();
+}
+```
+
+### 方法二：利用反射机制
+
+```php
+class ClassArr {
+
+    //定义类对应命名空间
+	public function uploadClassStat() {
+		return [
+			"image" => "\App\Lib\Upload\Image",
+			"video" => "\App\Lib\Upload\Video",
+		];
+	}
+    //获得类名
+	public function initClass($type, $supportedClass, $params = [], $needInstance = true) {
+		if(!array_key_exists($type, $supportedClass)) {
+			return false;
+		}
+
+		$className = $supportedClass[$type];
+
+		return $needInstance ? (new \ReflectionClass($className))->newInstanceArgs($params) : $className;
+	}
+
+}
+```
+
+```php
+$request = $this->request();
+$files = $request->getSwooleRequest()->files;
+$types = array_keys($files);
+$type = $types[0];
+try{
+    $classObj = new ClassArr();
+    $classStats = $classObj->uploadClassStat();
+    $uploadObj = $classObj->initClass($type,$classStats,[$request,$type]);
+    $file = $uploadObj->upload();
+}
+```
+
+
+
+## 验证规则
+
+安装validate包
+
+`composer require easyswoole/validate`
+
+controller下添加validate
+
+```php
+protected function validate(Validate $validate)
+{
+    return $validate->validate($this->request()->getRequestParam());
+}
+```
+
+调用校验规则
+
+```php
+$Validate = new Validate();
+$Validate->addColumn('name', 'name错误')
+    ->required('名字不为空')->lengthMin(10,'最小长度不小于10位');
+
+$ret = $this->validate($Validate);
+
+//返回错误信息
+if($ret == false){
+    $this->writeJson(Status::CODE_BAD_REQUEST
+                     ,$Validate->getError()->getFieldAlias()
+                     ,$Validate->getError()->getErrorRuleMsg()
+                    );
+}
+```
 
 
 
