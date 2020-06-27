@@ -472,7 +472,7 @@ public Event::__construct ( EventBase $base , mixed $fd , int $what , callable $
 
 前几章中，我们写了一个WEB服务器，并在shell终端中使用`sudo php server.php`成功地运行。但我们如何做到关闭终端之后，WEB服务器继续在后台运行呢？答案是通过`守护进程`，本节实验就将为大家介绍什么是守护进程，如何将一个普通的进程转换为守护进程，如何通过新号去管理守护进程。
 
-#### 1.1 实验知识点
+### 1.1 实验知识点
 
 - 守护进程
 - 信号
