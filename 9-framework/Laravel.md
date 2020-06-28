@@ -2370,7 +2370,7 @@ Route::resource('articles', 'ArticlesController');
 
 利用 artisan 创建一个文章控制器：
 
-```
+```shell
 php artisan make:controller ArticlesController
 ```
 
@@ -2536,7 +2536,7 @@ class ArticlesController extends Controller
 
 app/Http/Controllers/ArticlesController.php
 
-```
+```php
 <?php
 
 namespace App\Http\Controllers;
@@ -2566,7 +2566,7 @@ class ArticlesController extends Controller
 
 resources/views/articles/create.blade.php
 
-```
+```html
 @extends('layouts.app')
 
 @section('content')
@@ -2631,7 +2631,7 @@ php artisan make:migration create_articles_table
 
 database/migrations/XXXX_creat_articles_table.php
 
-```
+```php
 <?php
 
 use Illuminate\Database\Schema\Blueprint;
@@ -2690,7 +2690,7 @@ php artisan make:model Article
 
 app/Article.php
 
-```
+```php
 <?php
 
 namespace App;
