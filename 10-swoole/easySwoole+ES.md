@@ -32,6 +32,30 @@
 
 <img src="C:\Users\12605\Desktop\PHP_notes\.img\gnEXmAfOT9kxNbZ.png" alt="image-20200618154947317" style="zoom:100%;float:left;" />
 
+### 表设计
+
+```mysql
+CREATE TABLE `video` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL DEFAULT '',
+  `cat_id` smallint(4) unsigned NOT NULL DEFAULT '0',
+  `image` varchar(200) NOT NULL DEFAULT '',
+  `url` varchar(200) NOT NULL DEFAULT '',
+  `type` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `content` text NOT NULL,
+  `uploader` varchar(200) NOT NULL DEFAULT '',
+  `create_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `update_time` int(10) unsigned NOT NULL DEFAULT '0',
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `video_id` varchar(100) NOT NULL COMMENT '阿里云视频id',
+  `video_duration` float(10,2) NOT NULL COMMENT '视频时长',
+  PRIMARY KEY (`id`),
+  KEY `name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+```
+
+
+
 # EasySwoole框架
 
 ## EasySwoole简介
