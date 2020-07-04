@@ -1761,7 +1761,7 @@ if( $totalPage > $maxSize ){
 >       }
 >     }
 >   }
-> }'
+> }
 > ```
 
 上面代码中，首先新建一个名称为`accounts`的 Index，里面有一个名称为`person`的 Type。`person`有三个字段。
