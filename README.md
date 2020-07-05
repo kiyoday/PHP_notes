@@ -61,8 +61,17 @@ php相关技术栈笔记
 │      Yii2.md
 │      通用框架.md
 │
-└─10-swoole
-        easySwoole+ES.md
-        swoole基础.md
+├─10-swoole
+│      easySwoole+ES.md
+│      swoole初识.md
+│      swoole基础.md
+│      swoole实战01-配置登录.md
+│      swoole实战02-直播模块.md
+│      swoole实战03-聊天室.md
+│
+└─11-algorithm
+        01-数组.md
+        02-查找.md
+        README.md
 ```
 
