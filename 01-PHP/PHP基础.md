@@ -155,7 +155,7 @@
 - 定义const/define
 
 	  ```php
-	const pi=3.14
+	const pi = 3.14
 	define('pi',3.14);
 	```
 	

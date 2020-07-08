@@ -132,4 +132,33 @@ explain select lanauage_id id from film where lanauage_id=1\G
 ### 利用索引优化锁
 
 - 索引可以减少锁定的行数
--  a索引可以加快处理速度，同时也加快了锁的释放
+-  索引可以加快处理速度，同时也加快了锁的释放
+
+## 索引的维护和优化
+
+### 删除重复和冗余的索引
+
+![image-20200708110558241](C:\Users\12605\Desktop\PHP_notes\.img\image-20200708110558241.png)
+#### 联合索引的冗余
+
+![image-20200708110637317](C:\Users\12605\Desktop\PHP_notes\.img\image-20200708110637317.png)
+
+#### 检查索引是否冗余
+
+`pt-duplicate-key-checker h=127.0.0.1`
+
+`create index idx_customerid_staffid on payment (customer_ id,staff id);`
+
+<img src="C:\Users\12605\Desktop\PHP_notes\.img\image-20200708110734518.png" alt="image-20200708110734518" style="zoom:80%;" />
+
+#### 查找未被使用过的索引
+
+<img src="C:\Users\12605\Desktop\PHP_notes\.img\image-20200708110929784.png" alt="image-20200708110929784" style="zoom:80%;" />
+
+#### 更新索引统计信息及减少索引碎片
+
+```mysql
+analyze table table_name
+optimize table table_name #会锁表
+```
+

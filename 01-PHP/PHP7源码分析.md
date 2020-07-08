@@ -91,7 +91,7 @@ class Test {
 	private $num = 1;
 }
 $f = function() {//闭包函数
-	return $this->num + 1;
+	return $this-> num + 1;
 };
 echo $f->call(new Test);
 ```
@@ -198,9 +198,9 @@ $arr = [1, 2, 3];
 
   ```c
   typedef struct _zend_refcounted_h {
-  	uint32_t         refcount;			//给引用会加1 
+  	uint32_t		refcount;			//给引用会加1 
   	union {
-  		uint32_t type_info;
+      	uint32_t		type_info;
   	} u;
   } zend_refcounted_h;
   

@@ -126,3 +126,75 @@ mysql> show profiles;
 ### 优化UNION查询
 
 UNION ALL的效率高于 UNION
+
+## 如何获取有性能问题的SQL
+
+- 通过用户反馈获取存在性能问题的SQL
+
+- 通过慢查日志获取存在性能问题的SQL
+- 实时获取存在性能问题的SQL
+
+### 使用慢查询日志获取有性能问题的SQL
+
+- `磁盘IO`和
+
+- 存储日志所需要的`磁盘空间`
+
+| 配置项                          | 功能                              |
+| ------------------------------- | --------------------------------- |
+| `slow_query_log`                | 启动停止记录慢查日志              |
+| `slow_query_log_file`           | 指定慢查日志的存储路径及文件      |
+| `long_query_time`               | 指定记录慢查日志SQL执行时间的伐值 |
+| `log_queries_not_using_indexes` | 是否记录未使用索引的SQL           |
+
+#### 开启慢查询日志
+
+```mysql
+set global slow_query_log  = on 
+set global long_query_time  = on 
+```
+
+#### 慢查日志中记录的内容
+
+![image-20200708113216954](C:\Users\12605\Desktop\PHP_notes\.img\image-20200708113216954.png)
+
+#### 常用的慢查日志分析工具`(mysqldumpslow)`
+
+> 汇总除查询条件外其它完全相同的SQL ,
+> 并将分析结果按照参数中所指定的顺序输出。
+
+![image-20200708114434811](C:\Users\12605\Desktop\PHP_notes\.img\image-20200708114434811.png)
+
+<img src="C:\Users\12605\Desktop\PHP_notes\.img\image-20200708114453928.png" alt="image-20200708114453928" style="zoom:80%;float:left" />
+
+
+
+#### 慢查询日志实例
+
+![image-20200708114643166](C:\Users\12605\Desktop\PHP_notes\.img\image-20200708114643166.png)
+
+#### 常用的慢查日志分析工具`(pt-query-digest)`
+
+指定从服务器来进行生成慢查询日志优化
+
+![image-20200708114839005](C:\Users\12605\Desktop\PHP_notes\.img\image-20200708114839005.png)
+
+
+
+### 实时获取性能问题SQL
+
+![image-20200708115211398](C:\Users\12605\Desktop\PHP_notes\.img\image-20200708115211398.png)
+
+```mysql
+SELECT `id`, `user`,`hos` ,`DB`,`command`, `time` ,`state`,`info`
+FROM information_schema.PROCESSLIST
+WHERE TIME> = 60
+```
+
+
+
+#### SQL的解析预处理及生成执行计划
+
+#### 如何确定查询处理各个阶段所消耗的时间
+
+## 特定SQL的查询优化
