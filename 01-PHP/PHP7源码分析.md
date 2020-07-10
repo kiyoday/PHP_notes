@@ -316,17 +316,47 @@ HashTable Data Layout
 
 
 
-## 运行的生命周期
+# 运行的生命周期
 
-#### CLI模式
+## CLI模式
 
-#### FPM模式
+### cli模式的生命周期
 
-#### FastCGI协议
+![image-20200709201234157](C:\Users\12605\Desktop\PHP_notes\.img\image-20200709201234157.png)
 
-#### 网络编程/信号/多进程编程
+### debug解析
 
-## 编译与执行
+```shell
+$ gdb ./output/bin/php
+(gdb) b main #设置断点
+(gdb) r a.php #执行a.php
+Breakpoint 1,main(argc=2 , argv=0x7fffffffe3c8) 
+
+(gdb) p argc[0] # ./output/bin/php
+(gdb) p argc[1] # a.php
+```
+
+php_cli.c文件中 php.7.1.0
+
+设置几个断点
+
+```
+b php_module_startup
+b php_request_startup
+b php-execute_script
+b php_request_shutdown
+b php_module_shutdown
+```
+
+
+
+## FPM模式
+
+## FastCGI协议
+
+## 网络编程/信号/多进程编程
+
+# 编译与执行
 
 #### 词法/语法分析基本原理
 

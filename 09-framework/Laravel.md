@@ -4,7 +4,7 @@
 
 框提供了很多功能，比如数据库(DB)、缓存(Cache)、会话(Session)、文件上传等。
 
-不但为前期开发提供了方便,更为后期项目性能的优化(缓存技术由文件缓存换成Redis ) ，
+不但为前期开发提供了方便，更为后期项目性能的优化(缓存技术由文件缓存换成Redis ) ，
 
 平台的改变(数据库由Oracle换成Mysql)提供了技术保障
 
@@ -99,7 +99,7 @@ Route::get('/help', function() {
 
 对应的处理方法如下：
 
-```
+```php
 Route::post('/foo', function() {
     //该路由将匹配 post方法的 '/foo' url
 });
@@ -111,7 +111,7 @@ Route::put('/foo', function() {
 
 除此之外，还可以用 `match` 来同时处理多种类型的请求：
 
-```
+```php
 Route::match(['get', 'post'],'/foo', function () {
     // 该路由将匹配 get 和 post 方法的 'foo' url
 });
@@ -119,7 +119,7 @@ Route::match(['get', 'post'],'/foo', function () {
 
 甚至，还可以使用 `any` 来同时处理所有类型的请求：
 
-```
+```php
 Route::any('/foo', function() {
     // 该路由将匹配 所有 类型的 'foo' url
 });
@@ -2715,7 +2715,7 @@ class Article extends Model
 
 app/Http/Controllers/ArticlesController.php
 
-```
+```php
 <?php
 
 namespace App\Http\Controllers;
@@ -2756,13 +2756,13 @@ class ArticlesController extends Controller
 
 因为这段代码中用到了Eloquent 模型的构造器用法，所以需要引入我们之前创建的模型。
 
-```
+```php
 use App\Article;
 ```
 
 在收到表单传过来的数据时，可以先对表单数据进行验证：
 
-```
+```php
 $this->validate($request, [
     'title' => 'required|max:50',
 ]);
@@ -2770,7 +2770,7 @@ $this->validate($request, [
 
 最后完成文章的创建，然后重定向到文章列表页：
 
-```
+```php
 $article = Article::create([
     'title' => $request->title,
     'content' => $request->content,
@@ -2789,7 +2789,7 @@ return redirect()->route('article.index');
 
 但是此时，我们并不知道是不是真的添加成功了，我们可以去数据库里看一下是否有了刚刚插入的数据：
 
-```
+```php
 mysql -u root -p
 use myweb;
 select * from articles;
@@ -2807,7 +2807,7 @@ select * from articles;
 
 app/Http/Controllers/ArticlesController.php
 
-```
+```php
 <?php
 
 namespace App\Http\Controllers;
@@ -2845,7 +2845,7 @@ class ArticlesController extends Controller
 
 resoureces/views/articles/index.blade.php
 
-```
+```php+HTML
 @extends('layouts.app')
 
 @section('content')
@@ -2880,7 +2880,7 @@ resoureces/views/articles/index.blade.php
 
 resoureces/views/articles/index.blade.php
 
-```
+```php+HTML
 @extends('layouts.app')
 
 @section('content')
@@ -2904,7 +2904,7 @@ resoureces/views/articles/index.blade.php
 
 app/Http/Controllers/ArticlesController.php
 
-```
+```php+HTML
 <?php
 
 namespace App\Http\Controllers;
@@ -2946,7 +2946,7 @@ class ArticlesController extends Controller
 
 resources/views/articles/edit.blade.php
 
-```
+```php+HTML
 @extends('layouts.app')
 
 @section('content')
@@ -2969,7 +2969,7 @@ resources/views/articles/edit.blade.php
 
 app/Http/Controllers/ArticlesController.php
 
-```
+```php+HTML
 <?php
 
 namespace App\Http\Controllers;
@@ -3023,7 +3023,7 @@ class ArticlesController extends Controller
 
 resoureces/views/articles/index.blade.php
 
-```
+```php+HTML
 @extends('layouts.app')
 
 @section('content')
@@ -3052,7 +3052,7 @@ resoureces/views/articles/index.blade.php
 
 app/Http/Controllers/ArticlesController.php
 
-```
+```php+HTML
 <?php
 
 namespace App\Http\Controllers;
@@ -3094,7 +3094,7 @@ class ArticlesController extends Controller
 
 resources/views/layouts/app.blade.php
 
-```
+```php+HTML
 .
 .
 .      
@@ -3481,7 +3481,7 @@ bootstarp 3 文档 ：http://v3.bootcss.com/
 
 resources/views/welcome.blade.php
 
-```
+```HTML
 <!DOCTYPE html>
 <html>
     <head>
@@ -3567,7 +3567,7 @@ bootstarp文档：导航栏 http://v3.bootcss.com/css/#buttons
 
 resources/views/welcome.blade.php
 
-```
+```HTML
 <!DOCTYPE html>
 <html>
     <head>
@@ -3620,7 +3620,7 @@ bootstarp文档：水平排列的表单 http://v3.bootcss.com/css/#forms-horizon
 
 resources/views/welcome.blade.php
 
-```
+```HTML
 <!DOCTYPE html>
 <html>
     <head>
@@ -3683,7 +3683,7 @@ bootstarp 最经典的莫过于他的栅格布局设计了，它把一个屏幕�
 
 resources/views/welcome.blade.php
 
-```
+```HTML
 <!DOCTYPE html>
 <html>
     <head>

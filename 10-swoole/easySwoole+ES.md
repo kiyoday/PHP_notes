@@ -1802,7 +1802,6 @@ $ make && make install
 ```bash
 $ composer.phar require easyswoole/easyswoole=3.x-dev
 $ easyswoole install
-
 ```
 
 适配代码略。。。

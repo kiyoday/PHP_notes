@@ -116,7 +116,7 @@ Yaf_Request_Abstract的getPost， getQuery等方法， 并没有对应的setter�
 
 #### 默认控制器application/controllers/Index.php
 
-```
+```php
 <?php class IndexController extends Yaf_Controller_Abstract { public function indexAction() {//默认Action $this->getView()->assign("content"， "Hello Yaf"); } } ?>
 ```
 
