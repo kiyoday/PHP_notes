@@ -46,12 +46,14 @@ $ vi vimrc
 
 在打开的`vimrc`文件开头添加以下代码：
 
-```
+```bash
 set nu
 set fencs=utf-8,gbk,utf-16,utf-32,ucs-bom
 ```
 
-```
-git config --global core.editor "'D:\Sublime\sublime_text.exe' -w"
+修改git默认编辑器
+
+```bash
+$ git config --global core.editor "'D:\Sublime\sublime_text.exe' -w"
 ```
 
