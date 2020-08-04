@@ -434,7 +434,7 @@ Vue 允许为 v-on 在监听键盘事件时添加按键修饰符：
 
 ### v-model
 
-![img](.img/20151109171527_549.png)
+![img](/.img/20151109171527_549.png)
 
 - 作用：在表单元素上创建`双向数据绑定`
 - 说明：监听用户的输入事件以更新数据
@@ -754,7 +754,7 @@ axios.get('/user', {
 - [不同环境中处理 POST请求](https://github.com/axios/axios#using-applicationx-www-form-urlencoded-format)
 - 默认情况下，axios 会将JS对象序列化为JSON对象。为了使用 `application/x-www-form-urlencoded` 格式发送请求，我们可以这样：
 
-```js
+```jsx
 // 使用 qs 包，处理将对象序列化为字符串
 // npm i -S qs
 // var qs = require('qs')
@@ -781,7 +781,7 @@ axios.post('/user', qs.stringify({
 
 ### 全局配置
 
-```
+```js
 // 设置请求公共路径：
 axios.defaults.baseURL = 'http://vue.studyit.io'
 ```
@@ -790,7 +790,7 @@ axios.defaults.baseURL = 'http://vue.studyit.io'
 
 - 拦截器会拦截发送的每一个请求，请求发送之前执行`request`中的函数，请求发送完成之后执行`response`中的函数
 
-```
+```js
 // 请求拦截器
 axios.interceptors.request.use(function (config) {
     // 所有请求之前都要执行的操作
@@ -864,7 +864,7 @@ Vue.directive('color', function(el, binding) {
 
 ### 局部自定义指令
 
-```
+```js
 var vm = new Vue({
   el : "#app",
   directives: {
