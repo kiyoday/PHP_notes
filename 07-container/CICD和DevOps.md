@@ -26,3 +26,7 @@
 - Git+ Jenkins+ Kubernetes
 
 ![image-20200713101719670](C:\Users\12605\Desktop\PHP_notes\.img\image-20200713101719670.png)
+
+- Webhooks
+
+项目代码发生改变时，发送一个post请求给url
