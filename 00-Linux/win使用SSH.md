@@ -1,3 +1,13 @@
+##  分屏
+
+左右分屏：Alt+Shift+=
+
+上下分屏：Alt+Shift+-
+
+重点来了：
+
+***\*取消分屏：Ctrl+Shift+w\****
+
 ## SSH免密码登录
 
 ### windows端
@@ -7,7 +17,7 @@
 > ssh-keygen -t rsa #生成公钥私钥
 ```
 
- 
+
 
 ### linux端
 
