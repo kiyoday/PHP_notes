@@ -90,7 +90,9 @@ win+r快捷键  =>  输入regedit => 确定
 
 ------
 
-#### 2:添加WebStorm右键打开文件
+运行>regedit>计算机\HKEY_CLASSES_ROOT\Directory\shell
+
+#### 2:添加WebStorm右键打开`文件`
 
 找到`HKEY_CLASSES_ROOT` \ `*` \ `shell`
  在shell内新建**项**,命名为`WebStorm`
@@ -103,7 +105,7 @@ win+r快捷键  =>  输入regedit => 确定
 
 ------
 
-#### 3:添加WebStorm右键打开文件夹
+#### 3:添加WebStorm右键打开`文件夹`
 
 找到`HKEY_CLASSES_ROOT` \ `Directory` \ `shell`
  在shell内新建**项**,命名为`WebStorm`
