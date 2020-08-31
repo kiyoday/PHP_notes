@@ -158,3 +158,11 @@ set fencs=utf-8,gbk,utf-16,utf-32,ucs-bom
 git config --global core.editor "'D:\Sublime\sublime_text.exe' -w"
 ```
 
+## 设置idea终端
+
+```
+"C:\Program Files\Git\bin\sh.exe" -login -i
+WT
+powershell.exe
+```
+
