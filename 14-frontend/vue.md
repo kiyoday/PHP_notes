@@ -568,7 +568,7 @@ Vue.filter('filterName', function (value) {
 
 - 说明：局部过滤器是在某一个vue实例的内容创建的，只在当前实例中起作用
 
-```
+```js
 {
   data: {},
   // 通过 filters 属性创建局部过滤器
