@@ -10,7 +10,7 @@
 
 ### 2.核心结构
 
-![image-20200615131619746](https://i.loli.net/2020/06/15/K8nBeCdPWlTEHrs.png)
+![image-20200615131619746](K8nBeCdPWlTEHrs.png)
 
 ### 3.应用场景
 
