@@ -648,7 +648,7 @@ if ($("#syl")[0]) {
 
 运行效果为：
 
-![图片描述](d774804319bbfee04eff3e1af5db49ed-0)
+![图片描述](d774804319bbfee04eff3e1af5db49ed-0.png)
 
 ## 层次选择器
 
@@ -808,7 +808,7 @@ prev 和 next 是两个同级别的元素，选中在 prev 元素后面的 next 
 
 运行效果为：
 
-![图片描述](uid897174-20190424-1556076741130)
+![图片描述](uid897174-20190424-1556076741130.png)
 
 在层次选择器中，第 1 个和第 2 个选择器比较常用，而后面两个因为在 jQuery 里面可以用更加简单的方法来代替，所以使用的几率相对会少些：
 
@@ -2115,3 +2115,400 @@ $("p").hasClass("another");
 ![此处输入图片的描述](document-uid897174labid9222timestamp1555062428371.png)
 
 ## 遍历节点
+
+（1）`.children()` 方法
+
+获得匹配元素集合中每个元素的子元素，选择器选择性筛选。
+
+鉴于一个 jQuery 对象，表示一个 DOM 元素的集合，.children()方法允许我们通过在 DOM 树中对这些元素的直接子元素进行搜索，并且构造一个新的匹配元素的 jQuery 对象。`.find()` 和 `.children()` 方法是相似的，但后者只是针对向下一个级别的 DOM 树。还要注意的是和大多数的 jQuery 方法一样，`.children()` 不返回文本节点;让所有子元素包括使用文字和注释节点，建议使用 `.contents()`。
+
+`.children()` 方法选择性地接受同一类型选择器表达式，我们可以将参数传递给 `$()` 函数。如果提供选择器参数，将过滤出来的元素，测试它们是否匹配。
+
+示例：获取 ul 的子元素 li 的文本值
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script type="text/javascript" src="jquery-3.3.1.js"></script>
+  </head>
+  <body>
+    <ul>
+      <li>blue</li>
+      <li>white</li>
+      <li>red</li>
+    </ul>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        var ul_chlildList = $("ul").children();
+        for (var i = 0, len = ul_chlildList.length; i < len; i++) {
+          alert(ul_chlildList[i].innerHTML);
+        }
+      });
+    </script>
+  </body>
+</html>
+```
+
+运行效果为：
+
+![此处输入图片的描述](document-uid897174labid9222timestamp1555062497856.png)
+
+（2）`.next()` 方法
+
+取得匹配的元素集合中每一个元素紧邻的后面同辈元素的元素集合。如果提供一个选择器，那么只有紧跟着的兄弟元素满足选择器时，才会返回此元素。
+
+如果一个 jQuery 代表了一组 DOM 元素，`.next()` 方法允许我们找遍元素集合中紧跟着这些元素的直接兄弟元素，并根据匹配的元素创建一个新的 jQuery 对象。
+
+该方法还可以接受一个可选的选择器表达式，该选择器表达式可以是任何可传给 `$()` 函数的选择器表达式。如果每个元素的直接兄弟元素满足所提供的选择器，那么它会保存在新生成的 jQuery 对象中，否则，不会包含该元素。
+
+示例：获取 div 后面紧邻的同辈元素
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script type="text/javascript" src="jquery-3.3.1.js"></script>
+  </head>
+  <body>
+    <div>shiyanlou</div>
+    <p>SHIYANLOU</p>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        var div_next = $("div").next();
+        alert(div_next.text());
+      });
+    </script>
+  </body>
+</html>
+```
+
+运行效果为：
+
+![此处输入图片的描述](document-uid897174labid9222timestamp1555062597369.png)
+
+（3）`.prev()`
+
+取得一个包含匹配的元素集合中每一个元素紧邻的前一个同辈元素的元素集合。选择性筛选的选择器。
+
+如果提供的 jQuery 代表了一组 DOM 元素，`.prev()` 方法通过这些元素组合传递到方法构造一个新的 jQuery 对象。
+
+该方法选择性地接受同一类型选择器表达式，我们可以传递给 `$()` 函数。如果提供了选择器表达式，那么会先测试该元素是否满足匹配的选择器表达式。
+
+示例：获取 p 前面紧邻的同辈元素
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script type="text/javascript" src="jquery-3.3.1.js"></script>
+  </head>
+  <body>
+    <div>shiyanlou</div>
+    <p>SHIYANLOU</p>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        var p_prev = $("p").prev();
+        alert(p_prev.text());
+      });
+    </script>
+  </body>
+</html>
+```
+
+运行效果为：
+
+![此处输入图片的描述](document-uid897174labid9222timestamp1555062658893.png)
+
+（4）`.siblings()` 方法
+
+获得匹配元素集合中每个元素的兄弟元素,可以提供一个可选的选择器。
+
+如果提供的 jQuery 代表了一组 DOM 元素，`.siblings()` 方法通过这些元素组合传递到方法构造一个新的 jQuery 对象。
+
+该方法选择性地接受同一类型选择器表达式，我们可以传递给 `$()` 函数。如果提供了选择器表达式，那么会先测试该元素是否满足匹配的选择器表达式。
+
+示例：改变 p 元素前后所有的同辈元素的颜色
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script type="text/javascript" src="jquery-3.3.1.js"></script>
+  </head>
+  <body>
+    <div>shiyanlou</div>
+    <p>SHIYANLOU-P</p>
+    <div>SHIYANLOU</div>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $("p").siblings().css("background-color", "red");
+      });
+    </script>
+  </body>
+</html>
+```
+
+运行效果为：
+
+![此处输入图片的描述](document-uid897174labid9222timestamp1555062719015.png)
+
+（5）`.parent()` 方法
+
+取得匹配元素集合中，每个元素的父元素，可以提供一个可选的选择器。
+
+如果提供的 jQuery 代表了一组 DOM 元素，`.parent()` 方法允许我们能够在 DOM 树中搜索到这些元素的父级元素，从有序的向上匹配元素，并根据匹配的元素创建一个新的 jQuery 对象。
+
+`.parents()` 和 `.parent()` 方法是相似的，但后者只是进行了一个单级的 DOM 树查找（注：也就是只查找一层，直接的父元素，而不是更加上级的祖先元素）。此外，`$( "html" ).parent()` 方法返回一个包含 document 的集合，而 `$( "html" ).parents()` 返回一个空集合。
+
+该方法还可以接受一个可选的选择器表达式，该选择器表达式可以是任何可传给 `$()` 函数的选择器表达式。如果提供了选择器表达式，那么会先测试该元素是否满足匹配的选择器表达式。
+
+示例：获取 p 元素的父级元素的 class
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script type="text/javascript" src="jquery-3.3.1.js"></script>
+  </head>
+  <body>
+    <div class="demo">
+      <p>SHIYANLOU-P</p>
+    </div>
+    <script type="text/javascript">
+      var p_pa = $("p").parent();
+      alert(p_pa.attr("class"));
+    </script>
+  </body>
+</html>
+```
+
+运行效果为：
+
+![此处输入图片的描述](document-uid897174labid9222timestamp1555062777779.png)
+
+另外还有两个方法 `closest()` 和 `parents()` 方法大家可以了解一下：
+
++ `closest()` 方法从元素本身开始，逐级向上级元素匹配，并返回最先匹配的祖先元素。也就是说首先检查当前元素是否匹配，如果匹配则直接返回元素本身，如果不匹配则向上查找父级元素，逐级向上直到找到匹配选择器的元素，如果什么都没找到则返回一个空的 jQuery 对象。
++ `parents()` 获得集合中每个匹配元素的祖先元素。查找方式和 `parent()` 方法类似，不同点在于，当它找到第一个父节点时并没有停止查找，而是继续查找，最后返回多个父节点。
+
+## CSS-DOM 操作
+
+
+
+CSS-DOM 技术简单来说就是读取和设置 style 对象的各种属性。
+
+（1）`.css()`
+
+获取匹配元素集合中的第一个元素的样式属性的值或设置每个匹配元素的一个或多个 CSS 属性。
+
+`.css()` 方法可以非常方便地获取匹配的元素集合中第一个元素的样式属性值， 对于某些属性而言，浏览器访问样式属性的方式是不同的，该方法对于取得这些属性是非常方便的(例如，某些属性在标准浏览器下是通过的 `getComputedStyle()` 方法取得的，而在 Internet Explorer 下是通过 `currentStyle` 和 `runtimeStyle` 属性取得的)并且，某些特定的属性，不同浏览器的写法不一。举个例子， Internet Explorer 的 DOM 将 float 属性写成 styleFloat 实现，W3C 标准浏览器将 float 属性写成 cssFloat。 为了保持一致性，您可以简单地使用"float"，jQuery 将为每个浏览器返回它需要的正确值。
+
+另外,jQuery 同样可以解析 CSS 和 用 multiple-word 格式化（用横杠连接的词，比如：background-color）的 DOM 属性的不同写法。举个例子：jQuery 能解析 `.css('background-color')` 和 `.css('backgroundColor')` 并且返回正确的值。不同的浏览器可能会返回 CSS 颜色值在逻辑上相同，但在文字上表现不同，例如： #FFF, #ffffff, 和 rgb(255,255,255)。
+
+简写速写的 CSS 属性(例如： margin, background, border) 是不支持的，例如，如果你想重新获取 margin，可以使用 `$(elem).css('marginTop')` 和 `$(elem).css('marginRight')`，其他的也是如此。
+
+从 jQuery 1.9 开始, 传递一个 CSS 的样式属性的数组给 `.css()` 将返回 属性 - 值 配对的对象。例如，要获取元素 4 个边距宽度值 `border-width`，你可以使用 `$( elem ).css([ "borderTopWidth", "borderRightWidth", "borderBottomWidth", "borderLeftWidth" ])`.
+
+示例：获取 div 的背景颜色
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script type="text/javascript" src="jquery-3.3.1.js"></script>
+    <style type="text/css">
+      div {
+        background-color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div>shiyanlou</div>
+    <script type="text/javascript">
+      alert($("div").css("background-color"));
+    </script>
+  </body>
+</html>
+```
+
+运行效果为：
+
+![此处输入图片的描述](document-uid897174labid9222timestamp1555062888673.png)
+
+示例：为 div 设置边框和高度属性
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script type="text/javascript" src="jquery-3.3.1.js"></script>
+  </head>
+  <body>
+    <div>shiyanlou</div>
+    <script type="text/javascript">
+      $("div").css({ border: "1px solid red", height: "100px" });
+    </script>
+  </body>
+</html>
+```
+
+运行效果为：
+
+![此处输入图片的描述](document-uid897174labid9222timestamp1555062949580.png)
+
+对于透明度的设置，可以直接使用 opacity 属性，jQuery 已经处理好了兼容性的问题，比如：
+
+```js
+$("p").css("opacity", "0.5");
+```
+
+（2）`.height()`、`.width()`
+
++ `.height()` 获取匹配元素集合中的第一个元素的当前计算高度值 或 设置每一个匹配元素的高度值。
++ `.width()` 为匹配的元素集合中获取第一个元素的当前计算宽度值 或 给每个匹配的元素设置宽度。
+
+示例：获取 div 的高度和宽度
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script type="text/javascript" src="jquery-3.3.1.js"></script>
+
+    <style type="text/css">
+      .demo {
+        border: 1px solid red;
+        height: 100px;
+        width: 200px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="demo">shiyanlou</div>
+    <script type="text/javascript">
+      alert($("div").height() + " && " + $("div").width());
+    </script>
+  </body>
+</html>
+```
+
+运行效果为：
+
+![此处输入图片的描述](document-uid897174labid9222timestamp1555063004720.png)
+
+`height()` 方法也能用来设置元素的高度，如果传递的是一个数字，则默认单位是 px，如果要用其他单位，则必须传递一个字符串，比如：
+
+```js
+$("p").height(520);//设置<p>元素的高度值为520px
+$("p").height(10rem);//设置<p>元素的高度值为10rem
+```
+
+还可以通过 css 方法来获取高度值：
+
+```js
+$(element).css("height");
+```
+
+两者的区别是：`css()` 方法获取的高度值与样式的设置有关，可能会得到 “auto” ，也可能得到 “10px” 之类的字符串，而 `height()` 方法获取的高度值则是元素在页面中的实际高度，与样式的设置无关，而且不带单位。
+
+同样的 width 方法也是相类似的，这里就不再重复的讲解了，大家可以自行尝试使用看看效果。
+
+（3）元素定位
+
++ `offset()` 方法，在匹配的元素集合中，获取的第一个元素的当前坐标，或设置每一个元素的坐标，坐标相对于文档。这个方法不接受任何参数。`.offset()` 方法允许我们检索一个元素相对于文档（document）的当前位置。和 `.position()` 的差别在于：`.position()` 是相对于相对于父级元素的位移。当通过全局操作（特别是通过拖拽操作）将一个新的元素放置到另一个已经存在的元素的上面时，若要取得这个新的元素的位置，那么使用 `.offset()` 更合适。`.offset()` 返回一个包含 top 和 left 属性的对象 。比如：
+
+```js
+var p_offset = $("p").offset(); //获取<p>元素的offset()
+var p_offsetLeft = p_offset.left; //获取左偏移
+var p_offsetTop = p_offset.top; //获取右偏移
+```
+
++ `position()` 方法，获取匹配元素中第一个元素的当前坐标，相对于 offset parent 的坐标。(offset parent 指离该元素最近的而且被定位过的祖先元素 ) `.position()` 方法可以取得元素相对于父元素的偏移位置。与 `.offset()` 不同, `.offset()` 是获得该元素相对于 documet 的当前坐标 当把一个新元素放在同一个容器里面另一个元素附近时，用 `.position()` 更好用。`.position()`返回一个包含 top 和 left 属性的对象。
+
+```js
+var position = $("p").position(); //获取<p>元素的position()
+var left = position.left; //获取左偏移
+var top = position.top; //获取右偏移
+```
+
++ `scrollTop()` 方法和 `scrollLeft()` 方法，这两个方法的作用是分别获取元素的滚动条距顶端的距离和距左侧的距离。另外可以为这两个方法指定一个参数，控制元素的滚动条滚动到指定位置。比如：
+
+```js
+var $p = $("p");
+var scrollTop = $p.scrollTop(); //获取元素的滚动条距顶端的距离
+var scrollLeft = $p.scrollLeft(); //获取元素的滚动条距左侧的距离
+$("textarea").scrollTop(300); //元素的垂直滚动条滚动到指定的位置
+$("textarea").scrollLeft(300); //元素的横向滚动条滚动到指定的位置
+```
+
+# jQuery中的事件和动画
+
+## 加载 DOM
+
+在第一个实验中，我们简单的对比了一下 JavaScript 中原生的 `window.onload` 方法和 jQuery 中 `$(document).ready()` 方法的区别，下面我们再详细的对比一下它们之间的区别。
+
+（1）执行时机
+
+`window.onload` 方法是在网页中所有的元素（包括元素的所有关联文件）完全加载到浏览器后才执行，也就是说这个时候 JavaScript 才可以访问网页中的任何元素。而通过 jQuery 中 `$(document).ready()` 方法注册的事件处理程序，在 DOM 完全就绪时就可以被调用，也就是说这个时候网页的所有元素对 jQuery 而言都是可以访问的，但是并不意味着这些元素相关联的文件都已经下载完毕了。
+
+（2）多次使用
+
+```js
+window.onload = function () {
+  alert("test1");
+};
+window.onload = function () {
+  alert("test2");
+};
+//结果只会输出 test2。
+$(document).ready(function () {
+  alert("test1");
+});
+$(document).ready(function () {
+  alert("test2");
+});
+//结果两次都输出
+```
+
+（3）简写方式
+
+```js
+$(document).ready(function(){
+
+});
+
+// 可以简写成
+
+$(funciton(){
+
+})
+```
+
+另外(***document***)也可以简写成(),当 $() 不带参数时，默认参数就是 “document”，因此也可以简写为：
+
+```js
+$().ready(function () {});
+```
+
+# Query对表单、表格的操作
+
+# jQuery AJAX
+
+# jQuery插件的使用和写法
