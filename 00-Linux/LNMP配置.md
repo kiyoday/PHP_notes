@@ -241,15 +241,19 @@ $ tar -zxvf #解压
 
   1.确保服务器系统处于最新状态
 
-  [root@localhost ~]# yum -y update
+  ```sh
+[root@localhost ~]# yum -y update
+  ```
 
   如果显示以下内容说明已经更新完成
 
-  Replaced:
-
-   grub2.x86_64 1:2.02-0.64.el7.centos  grub2-tools.x86_64 1:2.02-0.64.el7.centos
-
-  Complete!
+  ```
+Replaced:
+  
+ grub2.x86_64 1:2.02-0.64.el7.centos  grub2-tools.x86_64 1:2.02-0.64.el7.centos
+  
+Complete!
+  ```
 
   2.重启服务器
 
@@ -402,7 +406,7 @@ $ tar -zxvf #解压
   \# 退出登录数据库
 
   mysql>exit;
-
+  
   \# 查看所有数据库用户
-
+  
   mysql>SELECT DISTINCT CONCAT('User: ''',user,'''@''',host,''';') AS query FROM mysql.user;
