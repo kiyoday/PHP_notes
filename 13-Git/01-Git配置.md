@@ -62,7 +62,7 @@ $ cat .gitconfig
 
 配置别名也可以直接修改这个文件，如果改错了，可以删掉文件重新通过命令配置。
 
-## PowerShell | git log 中文乱码问题解决
+## PowerShell | git log 中文乱码问题解决x
 
 ```bash
 git config --global --list
