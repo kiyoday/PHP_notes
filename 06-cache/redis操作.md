@@ -1,4 +1,4 @@
-redis
+### redis删除指定前缀的key
 
 ```shell
 redis-cli keys "key*" | xargs redis-cli del
@@ -13,5 +13,9 @@ Redis::pipeline(function ($pipe) {
 });
 ```
 
+### redis删除所有仓库的数据
 
+```
+flushall
+```
 
