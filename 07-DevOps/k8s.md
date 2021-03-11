@@ -2,23 +2,23 @@
 
 ### Docker Swarm Mode Architecture
 
-![image-20200711105922996](C:\Users\12605\Desktop\PHP_notes\.img\image-20200711105922996.png)
+![image-20200711105922996](https://meross-static-file.oss-cn-shenzhen.aliyuncs.com/uploads/1609923929944/1/9944/12/pic/20210310165402.png)
 
 ### Kubernetes Architecture
 
-![image-20200711110028677](C:\Users\12605\Desktop\PHP_notes\.img\image-20200711110028677.png)
+![image-20200711110028677](https://meross-static-file.oss-cn-shenzhen.aliyuncs.com/uploads/1609923929944/1/9944/12/pic/20210310165242.png)
 
-![image-20200711110125244](C:\Users\12605\Desktop\PHP_notes\.img\image-20200711110125244.png)
+![image-20200711110125244](https://meross-static-file.oss-cn-shenzhen.aliyuncs.com/uploads/1609923929944/1/9944/12/pic/20210310165403.png)
 
-![image-20200711110210156](C:\Users\12605\Desktop\PHP_notes\.img\image-20200711110210156.png)
+![image-20200711110210156](https://meross-static-file.oss-cn-shenzhen.aliyuncs.com/uploads/1609923929944/1/9944/12/pic/20210310165404.png)
 
-![image-20200711110902158](C:\Users\12605\Desktop\PHP_notes\.img\image-20200711110902158.png)
+![image-20200711110902158](https://meross-static-file.oss-cn-shenzhen.aliyuncs.com/uploads/1609923929944/1/9944/12/pic/20210310165405.png)
 
 ## minikube快速搭建k8s单节点
 
 ### k8s集群构成
 
-![qq%e6%88%aa%e5%9b%be20161207102912](C:\Users\12605\Desktop\PHP_notes\.img\QQ截图20161207102912.jpg)
+![qq%e6%88%aa%e5%9b%be20161207102912](https://meross-static-file.oss-cn-shenzhen.aliyuncs.com/uploads/1609923929944/1/9944/12/pic/20210310165406.jpg)
 
 
 
@@ -43,17 +43,17 @@
 
 ### pod最小单位
 
-![image-20200710124756020](C:\Users\12605\Desktop\PHP_notes\.img\image-20200710124756020.png)
+![image-20200710124756020](https://meross-static-file.oss-cn-shenzhen.aliyuncs.com/uploads/1609923929944/1/9944/12/pic/20210310165407.png)
 
-### Node节点![image-20200712160614548](C:\Users\12605\Desktop\PHP_notes\.img\image-20200712160614548.png)
+### Node节点![image-20200712160614548](https://meross-static-file.oss-cn-shenzhen.aliyuncs.com/uploads/1609923929944/1/9944/12/pic/20210310165408.png)
 
 service
 
-![image-20200712160811877](C:\Users\12605\Desktop\PHP_notes\.img\image-20200712160811877.png)
+![image-20200712160811877](https://meross-static-file.oss-cn-shenzhen.aliyuncs.com/uploads/1609923929944/1/9944/12/pic/20210310165409.png)
 
 ### k8s使用Label select标识pod划分为一个组
 
-![image-20200712160947652](C:\Users\12605\Desktop\PHP_notes\.img\image-20200712160947652.png)
+![image-20200712160947652](https://meross-static-file.oss-cn-shenzhen.aliyuncs.com/uploads/1609923929944/1/9944/12/pic/20210310165410.png)
 
 
 
@@ -73,7 +73,7 @@ $ cd labs/pod-basic
 $ pcat pod_nginx.yml
 ```
 
-![image-20200710125114544](C:\Users\12605\Desktop\PHP_notes\.img\image-20200710125114544.png)
+![image-20200710125114544](.img/20210310165411.png)
 
 ```shell
 $ kubectl create -f 
@@ -88,7 +88,7 @@ $ kubectl get pods -o wide #详细信息
 
 ```
 
-![image-20200710125418501](C:\Users\12605\Desktop\PHP_notes\.img\image-20200710125418501.png)
+![image-20200710125418501](https://meross-static-file.oss-cn-shenzhen.aliyuncs.com/uploads/1609923929944/1/9944/12/pic/20210310165412.png)
 
 ```shell
 $ minikube ssh #进入虚拟机
